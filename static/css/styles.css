@@ -425,6 +425,11 @@ body {
 .demo-section {
     background-color: var(--bg-secondary);
     text-align: center;
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-lg) var(--spacing-lg);
+    box-sizing: border-box;
 }
 
 .demo-content {
@@ -432,8 +437,18 @@ body {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-sm);
     align-items: center;
+    width: 100%;
+}
+
+.demo-section h2 {
+    margin-bottom: var(--spacing-md);
+}
+
+.demo-section .section-subtitle {
+    margin-bottom: var(--spacing-md);
+    max-width: 640px;
 }
 
 .demo-stage {
@@ -441,7 +456,7 @@ body {
     background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-xl);
-    padding: var(--spacing-xl);
+    padding: var(--spacing-lg);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
 }
 
@@ -567,7 +582,7 @@ body {
     border-radius: 16px;
     padding: var(--spacing-md) var(--spacing-lg);
     text-align: left;
-    min-height: 96px;
+    min-height: 84px;
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
@@ -612,7 +627,7 @@ body {
 
 @media (max-width: 768px) {
     .demo-stage {
-        padding: var(--spacing-lg);
+        padding: var(--spacing-md);
     }
 
     .demo-hands {
@@ -831,7 +846,7 @@ section h2 {
 }
 
 .vertical-pipeline {
-    max-width: 500px;
+    max-width: 440px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -840,15 +855,15 @@ section h2 {
 
 .pipeline-item {
     width: 100%;
-    max-width: 450px;
-    margin: var(--spacing-lg) 0;
+    max-width: 380px;
+    margin: var(--spacing-md) 0;
 }
 
 .pipeline-content {
     background-color: var(--bg-primary);
     border: 2px solid var(--border-color);
     border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
     text-align: center;
     transition: all var(--transition-base);
     position: relative;
@@ -874,20 +889,20 @@ section h2 {
 }
 
 .stage-icon {
-    font-size: 3rem;
-    margin: var(--spacing-md) 0;
+    font-size: 2.4rem;
+    margin: var(--spacing-sm) 0;
     display: block;
 }
 
 .pipeline-content h3 {
-    font-size: var(--font-size-lg);
-    margin: var(--spacing-md) 0 var(--spacing-sm);
+    font-size: var(--font-size-base);
+    margin: var(--spacing-sm) 0 var(--spacing-xs);
     color: var(--text-primary);
 }
 
 .pipeline-content p {
     color: var(--text-secondary);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
     margin: 0;
 }
 
@@ -895,14 +910,19 @@ section h2 {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80px;
+    height: 64px;
     color: var(--accent);
 }
 
 .pipeline-connector svg {
     display: block;
-    width: 50px;
-    height: 80px;
+    width: 40px;
+    height: 64px;
+    overflow: visible;
+}
+
+.pipeline-connector line {
+    stroke-width: 2.5;
 }
 
 /* Platform Support Section */
@@ -1033,6 +1053,12 @@ section h2 {
     border-radius: var(--radius-lg);
     border: 1px solid var(--border-color);
     text-align: center;
+    transition: all var(--transition-base);
+}
+
+.tech-item:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
 }
 
 .tech-icon {
@@ -1514,21 +1540,12 @@ code {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-lg);
+    padding: var(--spacing-xl) var(--spacing-lg);
 }
 
 .login-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-2xl);
-    max-width: 900px;
+    max-width: 1000px;
     width: 100%;
-}
-
-@media (max-width: 768px) {
-    .login-container {
-        grid-template-columns: 1fr;
-    }
 }
 
 .login-card {
@@ -1538,9 +1555,26 @@ code {
     border: 1px solid var(--border-color);
 }
 
+.login-card.login-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--spacing-2xl);
+    align-items: center;
+}
+
+.login-panel-left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.login-panel-right {
+    width: 100%;
+}
+
 .login-header {
-    text-align: center;
-    margin-bottom: var(--spacing-2xl);
+    text-align: left;
+    margin-bottom: 0;
 }
 
 .login-header h1 {
@@ -1549,6 +1583,27 @@ code {
 }
 
 .login-header p {
+    color: var(--text-secondary);
+}
+
+.login-intro {
+    color: var(--text-secondary);
+    font-size: var(--font-size-base);
+    margin: 0;
+}
+
+.login-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.login-chip {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-primary);
+    font-size: var(--font-size-xs);
     color: var(--text-secondary);
 }
 
@@ -1615,7 +1670,7 @@ code {
 }
 
 .login-footer {
-    text-align: center;
+    text-align: left;
     padding: var(--spacing-md) 0 0;
     border-top: 1px solid var(--border-color);
     margin-top: var(--spacing-lg);
@@ -1635,29 +1690,27 @@ code {
     text-decoration: underline;
 }
 
-.login-info {
-    background-color: var(--bg-secondary);
-    padding: var(--spacing-2xl);
-    border-radius: var(--radius-xl);
-    border: 1px solid var(--border-color);
-}
+@media (max-width: 900px) {
+    .login-card.login-panel {
+        grid-template-columns: 1fr;
+    }
 
-.login-info h2 {
-    font-size: var(--font-size-xl);
-    margin-bottom: var(--spacing-lg);
-    text-align: left;
-}
+    .login-panel-left {
+        align-items: center;
+        text-align: center;
+    }
 
-.login-info ul {
-    list-style: none;
-}
+    .login-header {
+        text-align: center;
+    }
 
-.login-info li {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-    color: var(--text-secondary);
+    .login-highlights {
+        justify-content: center;
+    }
+
+    .login-footer {
+        text-align: center;
+    }
 }
 
 .benefit-icon {
