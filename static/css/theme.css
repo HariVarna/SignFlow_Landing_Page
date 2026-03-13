@@ -218,7 +218,7 @@ svg:not(.theme-toggle svg) line {
 }
 
 /* Dark mode specific animations */
-:root[data-theme="dark"] @keyframes glow {
+@keyframes glow {
     0%, 100% {
         text-shadow: 0 0 10px rgba(0, 168, 204, 0.3);
     }

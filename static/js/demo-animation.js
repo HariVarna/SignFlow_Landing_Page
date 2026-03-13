@@ -3,6 +3,10 @@
  * Handles the interactive demo animation sequence
  */
 
+function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 class DemoAnimation {
     constructor() {
         this.demoSvg = document.querySelector('.demo-svg');
@@ -16,6 +20,17 @@ class DemoAnimation {
     }
 
     init() {
+        if (prefersReducedMotion()) {
+            this.resetAnimation();
+            this.showCaption();
+            return;
+        }
+
+        if (!('IntersectionObserver' in window)) {
+            this.startSequence();
+            return;
+        }
+
         // Start animation when element becomes visible
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {

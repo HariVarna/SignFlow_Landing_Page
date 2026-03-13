@@ -13,32 +13,44 @@
     <div class="contact-grid">
         <div class="contact-form-container">
             <h2>Send us a Message</h2>
-            <form class="contact-form" action="#" method="POST">
+            {% if form_status %}
+            <div class="form-status form-status-{{ form_status }}" role="status" aria-live="polite">
+                {{ form_message }}
+            </div>
+            {% endif %}
+            {% if form_errors %}
+            <ul class="form-errors">
+                {% for error in form_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <form class="contact-form" action="{{ url_for('contact') }}" method="POST">
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name" required>
+                    <input type="text" id="name" name="name" autocomplete="name" value="{{ form_data.name if form_data else '' }}" required>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" autocomplete="email" value="{{ form_data.email if form_data else '' }}" required>
                 </div>
 
                 <div class="form-group">
                     <label for="subject">Subject</label>
                     <select id="subject" name="subject" required>
                         <option value="">Select a topic</option>
-                        <option value="support">Technical Support</option>
-                        <option value="feedback">Feedback</option>
-                        <option value="contribute">Want to Contribute</option>
-                        <option value="partnership">Partnership</option>
-                        <option value="other">Other</option>
+                        <option value="support" {% if form_data and form_data.subject == 'support' %}selected{% endif %}>Technical Support</option>
+                        <option value="feedback" {% if form_data and form_data.subject == 'feedback' %}selected{% endif %}>Feedback</option>
+                        <option value="contribute" {% if form_data and form_data.subject == 'contribute' %}selected{% endif %}>Want to Contribute</option>
+                        <option value="partnership" {% if form_data and form_data.subject == 'partnership' %}selected{% endif %}>Partnership</option>
+                        <option value="other" {% if form_data and form_data.subject == 'other' %}selected{% endif %}>Other</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="6" required></textarea>
+                    <textarea id="message" name="message" rows="6" required>{{ form_data.message if form_data else '' }}</textarea>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Send Message</button>
@@ -56,7 +68,7 @@
 
             <div class="contact-info-item">
                 <h3>GitHub</h3>
-                <p><a href="https://github.com" target="_blank">SignFlow Repository</a></p>
+                <p><a href="https://github.com" target="_blank" rel="noopener noreferrer">SignFlow Repository</a></p>
                 <p class="info-description">Report issues, request features, or contribute code</p>
             </div>
 

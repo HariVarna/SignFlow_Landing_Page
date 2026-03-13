@@ -3,6 +3,10 @@
  * Handles various page animations and effects
  */
 
+function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 class SignFlowAnimations {
     constructor() {
         this.init();
@@ -18,7 +22,17 @@ class SignFlowAnimations {
     setupFadeInAnimations() {
         // Elements with data-animation attribute
         const animatedElements = document.querySelectorAll('[data-animation]');
-        
+
+        if (!animatedElements.length) return;
+
+        if (prefersReducedMotion()) {
+            animatedElements.forEach(element => {
+                element.style.opacity = '1';
+                element.style.animation = 'none';
+            });
+            return;
+        }
+
         animatedElements.forEach((element, index) => {
             const animationType = element.getAttribute('data-animation');
             
@@ -62,7 +76,7 @@ class SignFlowAnimations {
 
     setupHeroAnimations() {
         const hero = document.querySelector('.hero');
-        if (!hero) return;
+        if (!hero || prefersReducedMotion()) return;
 
         // Parallax effect on scroll
         window.addEventListener('scroll', () => {
@@ -73,7 +87,7 @@ class SignFlowAnimations {
                 const speed = 0.5 + (index * 0.1);
                 doodle.style.transform = `translateY(${scrolled * speed}px)`;
             });
-        });
+        }, { passive: true });
 
         // Subtle glow effect on hero title
         const heroTitle = document.querySelector('.hero-title');
@@ -90,6 +104,24 @@ class SignFlowAnimations {
 
     setupScrollAnimations() {
         // Create intersection observer for scroll-triggered animations
+        if (prefersReducedMotion()) {
+            document.querySelectorAll(
+                '.stat-card, .step, .platform-card, .download-card, .tech-item, .donation-card'
+            ).forEach(element => {
+                element.classList.add('animated');
+            });
+            return;
+        }
+
+        if (!('IntersectionObserver' in window)) {
+            document.querySelectorAll(
+                '.stat-card, .step, .platform-card, .download-card, .tech-item, .donation-card'
+            ).forEach(element => {
+                element.classList.add('animated');
+            });
+            return;
+        }
+
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -100px 0px'

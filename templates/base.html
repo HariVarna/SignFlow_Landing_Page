@@ -10,50 +10,60 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="navbar-container">
             <!-- Logo and Project Name -->
-            <div class="navbar-logo">
-                <div class="logo-emoji">🤟</div>
+            <a class="navbar-logo" href="{{ url_for('index') }}" aria-label="SignFlow home">
+                <div class="logo-emoji" aria-hidden="true">🤟</div>
                 <span class="logo-text">SignFlow</span>
-            </div>
+            </a>
 
             <!-- Navigation Menu -->
-            <div class="navbar-menu">
-                <a href="#home" class="nav-link nav-home">Home</a>
-                <a href="#why-matters" class="nav-link">Why It Matters</a>
-                <a href="#how-works" class="nav-link">How It Works</a>
-                <a href="#download" class="nav-link">Download</a>
-                <a href="#donate" class="nav-link nav-donate">Donate</a>
-                <a href="/login" class="nav-link">Login</a>
+            <div class="navbar-menu" id="nav-menu">
+                <a href="{{ url_for('index') }}#home" class="nav-link nav-home" data-scroll="home">Home</a>
+                <a href="{{ url_for('index') }}#why-matters" class="nav-link" data-scroll="why-matters">Why It Matters</a>
+                <a href="{{ url_for('index') }}#how-works" class="nav-link" data-scroll="how-works">How It Works</a>
+                <a href="{{ url_for('index') }}#download" class="nav-link" data-scroll="download">Download</a>
+                <a href="{{ url_for('index') }}#donate" class="nav-link nav-donate" data-scroll="donate">Donate</a>
+                <a href="{{ url_for('login') }}" class="nav-link">Login</a>
                 
                 <!-- Active link indicator -->
                 <div class="nav-underline"></div>
             </div>
 
-            <!-- Theme Toggle -->
-            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-                <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                </svg>
-                <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
-            </button>
+            <div class="navbar-actions">
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+
+                <!-- Mobile Nav Toggle -->
+                <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-controls="nav-menu" aria-expanded="false">
+                    <span class="nav-toggle-bar"></span>
+                    <span class="nav-toggle-bar"></span>
+                    <span class="nav-toggle-bar"></span>
+                </button>
+            </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" id="main-content">
         {% block content %}{% endblock %}
     </main>
 
@@ -67,16 +77,16 @@
             <div class="footer-section">
                 <h4>Navigation</h4>
                 <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/download">Download</a></li>
-                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                    <li><a href="{{ url_for('download') }}">Download</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-section">
                 <h4>Connect</h4>
                 <p>Email: <a href="mailto:signflow-official@gmail.com">signflow-official@gmail.com</a></p>
-                <p><a href="https://github.com" target="_blank">GitHub Repository</a></p>
+                <p><a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub Repository</a></p>
             </div>
         </div>
         <div class="footer-bottom">

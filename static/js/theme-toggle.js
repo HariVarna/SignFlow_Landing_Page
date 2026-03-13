@@ -3,6 +3,30 @@
  * Manages light/dark theme switching
  */
 
+const themeStorage = {
+    get(key) {
+        try {
+            return localStorage.getItem(key);
+        } catch (error) {
+            return null;
+        }
+    },
+    set(key, value) {
+        try {
+            localStorage.setItem(key, value);
+        } catch (error) {
+            // Ignore storage errors
+        }
+    },
+    remove(key) {
+        try {
+            localStorage.removeItem(key);
+        } catch (error) {
+            // Ignore storage errors
+        }
+    }
+};
+
 class ThemeToggle {
     constructor() {
         this.themeToggleBtn = document.getElementById('theme-toggle');
@@ -15,7 +39,7 @@ class ThemeToggle {
 
     init() {
         // Get saved theme or system preference
-        const savedTheme = localStorage.getItem('signflow-theme');
+        const savedTheme = themeStorage.get('signflow-theme');
         const systemTheme = this.getSystemTheme();
         const currentTheme = savedTheme || systemTheme;
 
@@ -27,10 +51,19 @@ class ThemeToggle {
 
         // Listen for system theme changes
         if (window.matchMedia) {
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            const onChange = (e) => {
+                const storedTheme = themeStorage.get('signflow-theme');
+                if (storedTheme) return;
                 const newTheme = e.matches ? 'dark' : 'light';
                 this.setTheme(newTheme, false);
-            });
+            };
+
+            if (mediaQuery.addEventListener) {
+                mediaQuery.addEventListener('change', onChange);
+            } else if (mediaQuery.addListener) {
+                mediaQuery.addListener(onChange);
+            }
         }
     }
 
@@ -57,9 +90,9 @@ class ThemeToggle {
 
         // Save preference if user manually changed it
         if (savePreference) {
-            localStorage.setItem('signflow-theme', theme);
+            themeStorage.set('signflow-theme', theme);
         } else {
-            localStorage.removeItem('signflow-theme');
+            themeStorage.remove('signflow-theme');
         }
 
         // Trigger theme change event for other scripts

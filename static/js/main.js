@@ -3,6 +3,38 @@
  * Initialization and utility functions
  */
 
+const safeStorage = {
+    get(key) {
+        try {
+            return localStorage.getItem(key);
+        } catch (error) {
+            return null;
+        }
+    },
+    set(key, value) {
+        try {
+            localStorage.setItem(key, value);
+        } catch (error) {
+            // Ignore storage errors (private mode, disabled storage, etc.)
+        }
+    },
+    remove(key) {
+        try {
+            localStorage.removeItem(key);
+        } catch (error) {
+            // Ignore storage errors
+        }
+    }
+};
+
+function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function isHomePage() {
+    return Boolean(document.querySelector('.hero'));
+}
+
 // Detect user's system theme preference
 function getSystemTheme() {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -19,43 +51,63 @@ const SCROLL_DEBOUNCE = 100;
 // Initialize application
 function initApp() {
     // Check for saved theme preference
-    const savedTheme = localStorage.getItem('signflow-theme');
+    const savedTheme = safeStorage.get('signflow-theme');
     const theme = savedTheme || getSystemTheme();
-    
+
     // Apply theme
     document.documentElement.setAttribute('data-theme', theme);
-    
+
     // Initialize intersection observer for animations
     initIntersectionObserver();
-    
+
     // Add event listeners
     setupEventListeners();
-    
-    // Initialize hash-based navigation
-    initHashNavigation();
-    
-    // Handle initial hash after DOM ready
-    setTimeout(() => {
-        handleHashNavigation();
-    }, 150);
+
+    // Initialize mobile navigation
+    initMobileNav();
+
+    if (isHomePage()) {
+        // Initialize hash-based navigation
+        initHashNavigation();
+
+        // Handle initial hash after DOM ready
+        setTimeout(() => {
+            handleHashNavigation();
+            updateNavState();
+        }, 150);
+    }
 }
 
 // Hash-based navigation system
 function initHashNavigation() {
-    const navLinks = document.querySelectorAll('.navbar-menu a[href^="#"]');
-    
+    if (!isHomePage()) return;
+
+    const navLinks = document.querySelectorAll('.navbar-menu a[data-scroll]');
+
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
+            if (!isHomePage()) return;
+
+            const targetHash = link.hash;
+            if (!targetHash) return;
+
+            const targetSection = targetHash === '#home'
+                ? document.querySelector('.hero')
+                : document.querySelector(targetHash);
+
+            if (!targetSection) return;
+
             e.preventDefault();
-            const href = link.getAttribute('href');
-            
-            if (href && href !== '#') {
-                // Just set hash - hashchange event will handle the rest
-                window.location.hash = href;
+
+            if (window.location.hash !== targetHash) {
+                window.location.hash = targetHash;
+            } else {
+                handleHashNavigation();
+                updateNavState();
             }
         }, { passive: false });
     });
-    
+
     // Listen for hash changes
     window.addEventListener('hashchange', () => {
         updateNavState();
@@ -63,39 +115,43 @@ function initHashNavigation() {
     }, { passive: true });
 }
 
+function scrollToSection(targetSection) {
+    const behavior = prefersReducedMotion() ? 'auto' : 'smooth';
+    targetSection.scrollIntoView({ behavior });
+}
+
 // Handle navigation to hash section
 function handleHashNavigation() {
+    if (!isHomePage()) return;
+
     const hash = window.location.hash || '#home';
-    let targetSection = null;
-    
-    if (hash === '#home') {
-        targetSection = document.querySelector('.hero');
-    } else {
-        targetSection = document.querySelector(hash);
-    }
-    
+    const targetSection = hash === '#home'
+        ? document.querySelector('.hero')
+        : document.querySelector(hash);
+
     if (targetSection) {
-        targetSection.scrollIntoView({ behavior: 'smooth' });
+        scrollToSection(targetSection);
     }
 }
 
 // Update navigation state (underline position)
 function updateNavState() {
+    if (!isHomePage()) return;
+
     const hash = window.location.hash || '#home';
-    const navLinks = document.querySelectorAll('.navbar-menu a[href^="#"]');
+    const navLinks = document.querySelectorAll('.navbar-menu a[data-scroll]');
     const underline = document.querySelector('.nav-underline');
-    
-    if (!underline) return;
-    
+
+    if (!underline || !navLinks.length) return;
+
     let activeLink = null;
-    
+
     navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href === hash) {
+        if (link.hash === hash) {
             activeLink = link;
         }
     });
-    
+
     if (activeLink) {
         positionUnderline(activeLink, underline);
     }
@@ -103,18 +159,31 @@ function updateNavState() {
 
 // Position underline under active link
 function positionUnderline(link, underline) {
+    const menu = document.querySelector('.navbar-menu');
+    if (!menu) return;
+
+    const menuRect = menu.getBoundingClientRect();
+    if (menuRect.width === 0 || menuRect.height === 0) return;
+
     const rect = link.getBoundingClientRect();
-    const menuRect = document.querySelector('.navbar-menu').getBoundingClientRect();
-    
     const left = rect.left - menuRect.left;
     const width = rect.width;
-    
+
     underline.style.left = left + 'px';
     underline.style.width = width + 'px';
 }
 
 // Setup intersection observer for scroll animations
 function initIntersectionObserver() {
+    const animatedItems = document.querySelectorAll('[data-animation]');
+
+    if (!animatedItems.length) return;
+
+    if (!('IntersectionObserver' in window) || prefersReducedMotion()) {
+        animatedItems.forEach(el => el.classList.add('animated'));
+        return;
+    }
+
     const options = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -133,55 +202,104 @@ function initIntersectionObserver() {
     }, options);
 
     // Observe all elements with animation attributes
-    document.querySelectorAll('[data-animation]').forEach(el => {
+    animatedItems.forEach(el => {
         observer.observe(el);
     });
 }
 
 // Setup general event listeners
 function setupEventListeners() {
-    // Debounced scroll handler for nav updates
-    window.addEventListener('scroll', () => {
-        const now = Date.now();
-        if (now - lastScrollTime < SCROLL_DEBOUNCE) return;
-        lastScrollTime = now;
-        
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(updateNavFromScroll, SCROLL_DEBOUNCE);
+    if (isHomePage()) {
+        // Debounced scroll handler for nav updates
+        window.addEventListener('scroll', () => {
+            const now = Date.now();
+            if (now - lastScrollTime < SCROLL_DEBOUNCE) return;
+            lastScrollTime = now;
+
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(updateNavFromScroll, SCROLL_DEBOUNCE);
+        }, { passive: true });
+
+        // Update underline on resize
+        window.addEventListener('resize', updateNavState, { passive: true });
+    }
+}
+
+// Mobile navigation toggle
+function initMobileNav() {
+    const toggle = document.getElementById('nav-toggle');
+    const menu = document.getElementById('nav-menu');
+
+    if (!toggle || !menu) return;
+
+    const setExpanded = (isOpen) => {
+        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        toggle.classList.toggle('is-open', isOpen);
+        menu.classList.toggle('is-open', isOpen);
+    };
+
+    const closeMenu = () => setExpanded(false);
+
+    toggle.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const isOpen = menu.classList.contains('is-open');
+        setExpanded(!isOpen);
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!menu.classList.contains('is-open')) return;
+        if (menu.contains(event.target) || toggle.contains(event.target)) return;
+        closeMenu();
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeMenu();
+        }
+    });
+
+    menu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => closeMenu());
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            closeMenu();
+        }
     }, { passive: true });
-    
-    // Update underline on resize
-    window.addEventListener('resize', updateNavState, { passive: true });
 }
 
 // Update nav based on scroll position
 function updateNavFromScroll() {
+    if (!isHomePage()) return;
+
     const scrollPos = window.scrollY + 150;
     const sections = [
         { hash: '#home', element: document.querySelector('.hero'), top: 0 },
         { hash: '#why-matters', element: document.querySelector('#why-matters'), top: 0 },
         { hash: '#how-works', element: document.querySelector('#how-works'), top: 0 },
-        { hash: '#download', element: document.querySelector('#download'), top: 0 }
+        { hash: '#download', element: document.querySelector('#download'), top: 0 },
+        { hash: '#donate', element: document.querySelector('#donate'), top: 0 }
     ];
-    
+
     let activeHash = '#home';
-    
+
     for (let section of sections) {
         if (section.element) {
             section.top = section.element.offsetTop;
         }
     }
-    
+
     for (let i = 0; i < sections.length; i++) {
         const current = sections[i];
         const next = sections[i + 1];
-        
+
         if (scrollPos >= current.top && (!next || scrollPos < next.top)) {
             activeHash = current.hash;
             break;
         }
     }
-    
+
     if (window.location.hash !== activeHash) {
         history.replaceState(null, null, activeHash);
         updateNavState();
@@ -191,7 +309,7 @@ function updateNavFromScroll() {
 // Utility function to add CSS class with animation
 function addAnimationClass(element, animationClass, onComplete) {
     element.classList.add(animationClass);
-    
+
     if (onComplete) {
         element.addEventListener('animationend', () => {
             onComplete();
