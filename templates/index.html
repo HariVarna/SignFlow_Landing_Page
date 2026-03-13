@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+
+{% block title %}SignFlow - Where Silent Signs Become a Voice{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero" id="home">
+    <div class="hero-background">
+        <div class="animated-hand-doodle doodle-1"></div>
+        <div class="animated-hand-doodle doodle-2"></div>
+        <div class="animated-hand-doodle doodle-3"></div>
+    </div>
+    
+    <div class="hero-content">
+        <h1 class="hero-title" data-animation="fade-in-down">SignFlow</h1>
+        <p class="hero-tagline" data-animation="fade-in-up">Where Silent Signs Become a Voice.</p>
+        <p class="hero-subtitle" data-animation="fade-in-up">Real-time sign language prediction</p>
+        
+        <div class="hero-buttons" data-animation="fade-in-up">
+            <a href="#download" class="btn btn-primary">Download SignFlow</a>
+            <a href="#how-works" class="btn btn-secondary">See How It Works</a>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Why It Matters Section -->
+<section id="why-matters" class="why-matters">
+    <div class="why-matters-content">
+        <h2>Why SignFlow Matters</h2>
+        <p class="section-subtitle">Breaking barriers in communication for the deaf and hard-of-hearing community</p>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">48 Million</div>
+                <p class="stat-label">Deaf and hard-of-hearing people worldwide</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">70%</div>
+                <p class="stat-label">Miss important communications due to lack of accessibility tools</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">Real-time</div>
+                <p class="stat-label">Instant captions powered by AI and computer vision</p>
+            </div>
+        </div>
+
+        <div class="impact-text">
+            <p>SignFlow enables <strong>real-time accessibility</strong> on any platform. By recognizing sign language in real-time, we create a world where silence is no longer a barrier to understanding.</p>
+        </div>
+    </div>
+</section>
+
+<!-- How SignFlow Works Section -->
+<section class="how-it-works" id="how-works">
+    <h2>The SignFlow Pipeline</h2>
+    <p class="section-subtitle">From video to captions in milliseconds</p>
+    
+    <div class="vertical-pipeline">
+        <!-- Stage 1 -->
+        <div class="pipeline-item">
+            <div class="pipeline-content">
+                <div class="stage-number">01</div>
+                <div class="stage-icon">📹</div>
+                <h3>Video Capture</h3>
+                <p>Real-time video feed from your screen or camera</p>
+            </div>
+        </div>
+        
+        <!-- Connector -->
+        <div class="pipeline-connector">
+            <svg width="50" height="80" viewBox="0 0 50 80" preserveAspectRatio="none">
+                <defs>
+                    <marker id="arrowdown" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                        <polygon points="0 0, 10 5, 0 10" fill="currentColor" />
+                    </marker>
+                </defs>
+                <line x1="25" y1="5" x2="25" y2="75" stroke="currentColor" stroke-width="3" marker-end="url(#arrowdown)" stroke-linecap="round" />
+            </svg>
+        </div>
+        
+        <!-- Stage 2 -->
+        <div class="pipeline-item">
+            <div class="pipeline-content">
+                <div class="stage-number">02</div>
+                <div class="stage-icon">👐</div>
+                <h3>Hand Detection</h3>
+                <p>MediaPipe extracts hand landmarks and pose</p>
+            </div>
+        </div>
+        
+        <!-- Connector -->
+        <div class="pipeline-connector">
+            <svg width="50" height="80" viewBox="0 0 50 80" preserveAspectRatio="none">
+                <defs>
+                    <marker id="arrowdown2" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                        <polygon points="0 0, 10 5, 0 10" fill="currentColor" />
+                    </marker>
+                </defs>
+                <line x1="25" y1="5" x2="25" y2="75" stroke="currentColor" stroke-width="3" marker-end="url(#arrowdown2)" stroke-linecap="round" />
+            </svg>
+        </div>
+        
+        <!-- Stage 3 -->
+        <div class="pipeline-item">
+            <div class="pipeline-content">
+                <div class="stage-number">03</div>
+                <div class="stage-icon">🤖</div>
+                <h3>ML Inference</h3>
+                <p>Neural network predicts sign language tokens</p>
+            </div>
+        </div>
+        
+        <!-- Connector -->
+        <div class="pipeline-connector">
+            <svg width="50" height="80" viewBox="0 0 50 80" preserveAspectRatio="none">
+                <defs>
+                    <marker id="arrowdown3" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                        <polygon points="0 0, 10 5, 0 10" fill="currentColor" />
+                    </marker>
+                </defs>
+                <line x1="25" y1="5" x2="25" y2="75" stroke="currentColor" stroke-width="3" marker-end="url(#arrowdown3)" stroke-linecap="round" />
+            </svg>
+        </div>
+        
+        <!-- Stage 4 -->
+        <div class="pipeline-item">
+            <div class="pipeline-content">
+                <div class="stage-number">04</div>
+                <div class="stage-icon">💬</div>
+                <h3>Live Captions</h3>
+                <p>English text appears instantly in overlay</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Platform Support Section -->
+<section class="platform-support">
+    <h2>Platform Support</h2>
+    <div class="platforms-grid">
+        <div class="platform-card">
+            <div class="platform-icon">🪟</div>
+            <h3>Windows</h3>
+            <p>Full support</p>
+        </div>
+        <div class="platform-card">
+            <div class="platform-icon">🐧</div>
+            <h3>Linux</h3>
+            <p>Experimental</p>
+        </div>
+        <div class="platform-card">
+            <div class="platform-icon">🍎</div>
+            <h3>macOS</h3>
+            <p>Coming soon</p>
+        </div>
+        <div class="platform-card">
+            <div class="platform-icon">📱</div>
+            <h3>Android</h3>
+            <p>Mobile version</p>
+        </div>
+    </div>
+</section>
+
+<!-- Download Section -->
+<section id="download" class="download-section">
+    <h2>Download SignFlow</h2>
+    <p class="section-subtitle">Choose your platform</p>
+    
+    <div class="download-grid">
+        <div class="download-card recommended">
+            <div class="recommended-badge">Recommended</div>
+            <h3>Windows</h3>
+            <p class="download-description">SignFlow for Windows 10+</p>
+            <a href="#" class="btn btn-primary">Download for Windows</a>
+            <p class="version-info">Latest: v1.0.0</p>
+        </div>
+        <div class="download-card">
+            <h3>Linux</h3>
+            <p class="download-description">Experimental build for Linux</p>
+            <a href="#" class="btn btn-secondary">Download for Linux</a>
+            <p class="version-info">Latest: v1.0.0-beta</p>
+        </div>
+        <div class="download-card">
+            <h3>macOS</h3>
+            <p class="download-description">Coming in the next release</p>
+            <button class="btn btn-disabled" disabled>Coming Soon</button>
+            <p class="version-info">Q4 2026</p>
+        </div>
+        <div class="download-card">
+            <h3>Android</h3>
+            <p class="download-description">SignFlow mobile application</p>
+            <a href="#" class="btn btn-secondary">Download for Android</a>
+            <p class="version-info">Latest: v1.0.0</p>
+        </div>
+    </div>
+</section>
+
+<!-- Open Source Section -->
+<section class="open-source">
+    <div class="open-source-content">
+        <h2>Built with Open-Source Technology</h2>
+        <p class="section-subtitle">Transparent, accessible, community-driven</p>
+        
+        <div class="tech-features">
+            <div class="tech-item">
+                <div class="tech-icon">👁️</div>
+                <h3>Computer Vision</h3>
+                <p>Advanced visual processing for hand and gesture detection</p>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">🧠</div>
+                <h3>Machine Learning</h3>
+                <p>Trained models for sign language recognition and prediction</p>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">🙌</div>
+                <h3>MediaPipe</h3>
+                <p>Robust hand tracking library from Google Research</p>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">🔓</div>
+                <h3>Open Development</h3>
+                <p>Contribute on GitHub and help shape the future of accessibility</p>
+            </div>
+        </div>
+
+        <div class="github-cta">
+            <a href="https://github.com" target="_blank" class="btn btn-secondary">View on GitHub</a>
+        </div>
+    </div>
+</section>
+
+<!-- Donation Section -->
+<section id="donate" class="donation-section">
+    <div class="donation-content">
+        <h2>Support SignFlow Development</h2>
+        <p class="section-subtitle">Help us make sign language accessible to everyone</p>
+        
+        <div class="donation-cards">
+            <div class="donation-card">
+                <div class="donation-amount">$5</div>
+                <p class="donation-desc">Coffee & Development</p>
+                <button class="btn btn-secondary">Donate</button>
+            </div>
+            <div class="donation-card featured">
+                <div class="donation-amount">$25</div>
+                <p class="donation-desc">Monthly Supporter</p>
+                <button class="btn btn-primary">Donate</button>
+            </div>
+            <div class="donation-card">
+                <div class="donation-amount">$100</div>
+                <p class="donation-desc">Research & Innovation</p>
+                <button class="btn btn-secondary">Donate</button>
+            </div>
+        </div>
+
+        <p class="donation-message">Every donation directly supports accessibility research, development, and community outreach.</p>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/demo-animation.js') }}"></script>
+{% endblock %}
