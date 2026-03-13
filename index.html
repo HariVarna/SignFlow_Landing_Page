@@ -10,6 +10,9 @@
 
 <link rel="stylesheet" href="style.css">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
@@ -17,22 +20,26 @@
 <nav class="navbar">
 
 <div class="logo-container">
-<img src="assets/signflow-logo.png" class="logo-img">
-<span class="logo-text">SignFlow</span>
+<img src="assets/signflow-logo.png" class="logo">
+<span>SignFlow</span>
 </div>
 
 <ul class="nav-links">
+
 <li><a href="#home">Home</a></li>
 <li><a href="#download">Download</a></li>
 <li><a href="#features">Features</a></li>
 <li><a href="#about">About</a></li>
-<li><a href="#donate">Donate</a></li>
 <li><a href="#contact">Contact</a></li>
+
 </ul>
 
-<div class="auth-buttons">
+<div class="nav-auth">
+
 <a href="login.html">Login</a>
+
 <a class="register-btn" href="login.html">Register</a>
+
 </div>
 
 </nav>
@@ -41,48 +48,51 @@
 
 <section id="home" class="hero">
 
+<div class="hero-content">
+
 <img src="assets/signflow-logo.png" class="hero-logo">
 
 <h1>Real-Time Sign Language → English Captions</h1>
 
 <p>
 SignFlow captures a video region, detects sign language gestures using AI,
-and converts them into live captions displayed on any video platform.
+and converts them into live English captions that appear directly
+on top of any video platform.
 </p>
 
-<a class="cta" href="#download">Download SignFlow</a>
+<a href="#download" class="cta-btn">Download SignFlow</a>
+
+</div>
 
 </section>
 
 
 
-<!-- DOWNLOAD SECTION -->
-
 <section id="download" class="download-section">
 
 <h2>Download SignFlow</h2>
 
-<p class="subtitle">Choose your platform</p>
+<p class="subtitle">Available for</p>
 
-<div class="download-row">
+<div class="platform-row">
 
 <a class="download-btn">
-<img src="https://cdn.simpleicons.org/windows/0078D6">
+<img src="https://cdn.simpleicons.org/windows">
 <span>Windows</span>
 </a>
 
 <a class="download-btn">
-<img src="https://cdn.simpleicons.org/apple/000000">
+<img src="https://cdn.simpleicons.org/apple">
 <span>Mac</span>
 </a>
 
 <a class="download-btn">
-<img src="https://cdn.simpleicons.org/linux/FCC624">
+<img src="https://cdn.simpleicons.org/linux">
 <span>Linux</span>
 </a>
 
 <a class="download-btn">
-<img src="https://cdn.simpleicons.org/android/3DDC84">
+<img src="https://cdn.simpleicons.org/android">
 <span>Android</span>
 </a>
 
@@ -92,27 +102,40 @@ and converts them into live captions displayed on any video platform.
 
 
 
-<!-- FEATURES -->
-
-<section id="features" class="section">
+<section id="features" class="features-section">
 
 <h2>Features</h2>
 
-<div class="features">
+<div class="features-grid">
 
-<div class="feature">
+<div class="feature-card">
+
 <h3>Real-Time Detection</h3>
-<p>Detect sign language gestures instantly.</p>
+
+<p>
+AI models detect sign gestures instantly from live video frames.
+</p>
+
 </div>
 
-<div class="feature">
+<div class="feature-card">
+
 <h3>Live Caption Overlay</h3>
-<p>Captions appear directly on the video.</p>
+
+<p>
+Captions appear directly on the screen without interrupting the video.
+</p>
+
 </div>
 
-<div class="feature">
+<div class="feature-card">
+
 <h3>Region Capture</h3>
-<p>Select the video area for detection.</p>
+
+<p>
+Select the exact video area to perform gesture detection.
+</p>
+
 </div>
 
 </div>
@@ -121,76 +144,71 @@ and converts them into live captions displayed on any video platform.
 
 
 
-<section id="about" class="section">
+<section id="about" class="about-section">
 
 <h2>About SignFlow</h2>
 
 <p>
-SignFlow is an accessibility project designed to convert sign language
-gestures into readable English captions in real time.
+SignFlow is an accessibility-focused AI system that converts
+sign language gestures into readable English captions in real time.
+
+It enables inclusive communication by allowing viewers to
+understand sign language directly while watching any digital video.
 </p>
 
 </section>
 
 
 
-<section id="donate" class="section">
+<section class="donate-section">
 
-<h2>Support SignFlow</h2>
+<h2>Support the Project</h2>
+
+<p>
+Help improve accessibility technology.
+</p>
+
+<div class="donate-buttons">
 
 <button>Donate via Stripe</button>
-<button>Buy Me A Coffee</button>
+
+<button>Buy Me a Coffee</button>
+
+</div>
 
 </section>
 
 
 
-<!-- CONTACT SECTION -->
-
-<section id="contact" class="section contact-section">
+<section id="contact" class="contact-section">
 
 <h2>Contact</h2>
 
-<div class="contact-info">
+<div class="contact-grid">
 
 <div class="contact-item">
 <img src="https://cdn.simpleicons.org/gmail">
-<div>
-<h4>Email</h4>
-<p>yourmail@gmail.com</p>
-</div>
+<span>yourmail@gmail.com</span>
 </div>
 
 <div class="contact-item">
 <img src="https://cdn.simpleicons.org/phone">
-<div>
-<h4>Phone</h4>
-<p>+91 00000 00000</p>
-</div>
+<span>+91 00000 00000</span>
 </div>
 
 <div class="contact-item">
 <img src="https://cdn.simpleicons.org/github">
-<div>
-<h4>GitHub</h4>
-<p>github.com/yourusername</p>
-</div>
+<span>github.com/yourusername</span>
 </div>
 
 <div class="contact-item">
 <img src="https://cdn.simpleicons.org/linkedin">
-<div>
-<h4>LinkedIn</h4>
-<p>linkedin.com/in/yourusername</p>
-</div>
+<span>linkedin.com/in/yourusername</span>
 </div>
 
 <div class="contact-item">
 <img src="https://cdn.simpleicons.org/instagram">
-<div>
-<h4>Instagram</h4>
-<p>@yourusername</p>
-</div>
+<span>@yourusername</span>
 </div>
 
 </div>
