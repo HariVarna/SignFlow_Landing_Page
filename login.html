@@ -3,7 +3,7 @@
 
 <head>
 
-<title>Login</title>
+<title>SignFlow Authentication</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -11,7 +11,21 @@
 
 <body>
 
-<div class="form-container">
+<div class="login-page">
+
+<div class="auth-box">
+
+<div class="auth-tabs">
+
+<button onclick="showLogin()" id="loginTab">Login</button>
+
+<button onclick="showRegister()" id="registerTab" class="active">Register</button>
+
+</div>
+
+
+
+<div id="loginForm" class="auth-form">
 
 <h2>Login</h2>
 
@@ -21,10 +35,29 @@
 
 <button>Login</button>
 
-<p>New user? <a href="register.html">Register</a></p>
+</div>
+
+
+
+<div id="registerForm" class="auth-form active">
+
+<h2>Create Account</h2>
+
+<input type="text" placeholder="Name">
+
+<input type="email" placeholder="Email">
+
+<input type="password" placeholder="Password">
+
+<button>Create Account</button>
 
 </div>
 
-</body>
+</div>
 
+</div>
+
+<script src="script.js"></script>
+
+</body>
 </html>

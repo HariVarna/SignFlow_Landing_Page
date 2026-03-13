@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SignFlow</title>
 
@@ -17,24 +20,27 @@
 
 <ul class="nav-links">
 
-<li><a href="download.html">Download</a></li>
-<li><a href="about.html">About</a></li>
-<li><a href="donate.html">Donate</a></li>
-<li><a href="contact.html">Contact</a></li>
+<li><a href="#home">Home</a></li>
+<li><a href="#download">Download</a></li>
+<li><a href="#features">Features</a></li>
+<li><a href="#about">About</a></li>
+<li><a href="#donate">Donate</a></li>
+<li><a href="#contact">Contact</a></li>
 
 </ul>
 
 <div class="auth-buttons">
 
 <a href="login.html">Login</a>
-<a class="register-btn" href="register.html">Register</a>
+<a class="register-highlight" href="login.html">Register</a>
 
 </div>
 
 </nav>
 
 
-<section class="hero">
+
+<section id="home" class="hero">
 
 <div class="hero-text">
 
@@ -42,38 +48,69 @@
 
 <p>
 SignFlow captures a video region, detects sign language gestures using AI,
-and converts them into live English captions as an overlay.
-Works on any video platform.
+and converts them into live English captions displayed as an overlay
+on any video platform.
 </p>
 
-<a class="cta" href="download.html">Download Now</a>
+<a class="cta" href="#download">Download SignFlow</a>
 
 </div>
 
-<img src="assets/demo.gif">
+<img src="./assets/demo.gif">
 
 </section>
 
 
-<section class="section">
 
-<h2>Supported Platforms</h2>
+<section id="download" class="section download-section">
 
-<div class="platform-grid">
+<h2>Download SignFlow</h2>
 
-<div class="platform">Windows</div>
-<div class="platform">Linux</div>
-<div class="platform">Mac</div>
-<div class="platform">Android</div>
+<p class="download-subtitle">Download for</p>
+
+<div class="platform-buttons">
+
+<a class="platform-btn">
+
+<img src="./assets/windows.png">
+
+<span>Windows</span>
+
+</a>
+
+<a class="platform-btn">
+
+<img src="./assets/mac.png">
+
+<span>Mac</span>
+
+</a>
+
+<a class="platform-btn">
+
+<img src="./assets/linux.png">
+
+<span>Linux</span>
+
+</a>
+
+<a class="platform-btn">
+
+<img src="./assets/android.png">
+
+<span>Android</span>
+
+</a>
 
 </div>
 
 </section>
 
 
-<section class="section">
 
-<h2>Key Features</h2>
+<section id="features" class="section">
+
+<h2>Features</h2>
 
 <div class="card-grid">
 
@@ -87,14 +124,14 @@ Works on any video platform.
 <div class="card">
 
 <h3>Live Caption Overlay</h3>
-<p>Captions appear on top of any video.</p>
+<p>Captions appear directly on video.</p>
 
 </div>
 
 <div class="card">
 
 <h3>Region Capture</h3>
-<p>Select a video region for detection.</p>
+<p>Select the video area to detect gestures.</p>
 
 </div>
 
@@ -103,12 +140,61 @@ Works on any video platform.
 </section>
 
 
+
+<section id="about" class="section">
+
+<h2>About SignFlow</h2>
+
+<p>
+SignFlow is an accessibility project designed to convert sign language gestures
+into readable English captions in real time.
+</p>
+
+</section>
+
+
+
+<section id="donate" class="section">
+
+<h2>Support SignFlow</h2>
+
+<button>Donate via Stripe</button>
+
+<button>Buy Me A Coffee</button>
+
+</section>
+
+
+
+<section id="contact" class="section">
+
+<h2>Contact</h2>
+
+<form class="contact-form">
+
+<input type="text" placeholder="Name">
+
+<input type="email" placeholder="Email">
+
+<textarea placeholder="Message"></textarea>
+
+<button>Send Message</button>
+
+</form>
+
+</section>
+
+
+
 <footer class="footer">
 
 <p>© 2026 SignFlow</p>
 
 </footer>
 
-</body>
 
+
+<script src="script.js"></script>
+
+</body>
 </html>

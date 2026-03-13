@@ -1,16 +1,12 @@
-document.querySelectorAll("a").forEach(anchor => {
+document.querySelectorAll("a[href^='#']").forEach(anchor => {
 
 anchor.addEventListener("click", function(e){
 
-if(this.hash !== ""){
 e.preventDefault()
 
-const hash = this.hash
-
-document.querySelector(hash).scrollIntoView({
+document.querySelector(this.getAttribute("href")).scrollIntoView({
 behavior:"smooth"
 })
-}
 
 })
 
