@@ -9,12 +9,19 @@ function prefersReducedMotion() {
 
 class DemoAnimation {
     constructor() {
-        this.demoSvg = document.querySelector('.demo-svg');
-        this.timeline = [];
+        this.demoStage = document.querySelector('.demo-stage');
+        this.captureBox = document.querySelector('.capture-box');
+        this.processing = document.querySelector('.demo-processing');
+        this.captionText = document.querySelector('.caption-text');
+        this.captionCaret = document.querySelector('.caption-caret');
+        this.leftHand = document.querySelector('.hand-left');
+        this.rightHand = document.querySelector('.hand-right');
         this.isAnimating = false;
-        this.animationSpeed = 1; // Can be adjusted for speed control
-        
-        if (this.demoSvg) {
+        this.typingTimer = null;
+        this.sequenceTimer = null;
+        this.handTimer = null;
+
+        if (this.demoStage) {
             this.init();
         }
     }
@@ -22,7 +29,7 @@ class DemoAnimation {
     init() {
         if (prefersReducedMotion()) {
             this.resetAnimation();
-            this.showCaption();
+            this.typeCaption(true);
             return;
         }
 
@@ -31,181 +38,152 @@ class DemoAnimation {
             return;
         }
 
-        // Start animation when element becomes visible
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting && !this.isAnimating) {
+                if (entry.isIntersecting) {
                     this.startSequence();
+                } else {
+                    this.stopSequence();
                 }
             });
         }, { threshold: 0.5 });
 
-        observer.observe(this.demoSvg);
+        observer.observe(this.demoStage);
     }
 
     startSequence() {
+        if (this.isAnimating) return;
         this.isAnimating = true;
+        this.startHandSequence();
         this.resetAnimation();
         this.playAnimation();
     }
 
     resetAnimation() {
-        // Reset all elements to initial state
-        const hands = this.demoSvg.querySelector('.hands');
-        const selectionBox = this.demoSvg.querySelector('.selection-box');
-        const processing = this.demoSvg.querySelector('.processing');
-        const caption = this.demoSvg.querySelector('.caption-overlay');
+        if (this.captureBox) {
+            this.captureBox.classList.remove('is-drawing');
+            this.captureBox.style.strokeDasharray = '18 12';
+            const length = this.captureBox.getTotalLength();
+            this.captureBox.style.strokeDashoffset = length;
+            this.captureBox.style.transition = 'none';
+        }
 
-        if (hands) hands.setAttribute('opacity', '0');
-        if (selectionBox) selectionBox.setAttribute('opacity', '0');
-        if (processing) processing.setAttribute('opacity', '0');
-        if (caption) caption.setAttribute('opacity', '0');
+        if (this.processing) {
+            this.processing.classList.remove('is-active');
+        }
+
+        if (this.captionText) {
+            this.captionText.textContent = '';
+        }
+
+        if (this.captionCaret) {
+            this.captionCaret.classList.remove('is-active');
+        }
     }
 
     playAnimation() {
-        const duration = 4000; // 4 second animation cycle
-        
-        // Step 1: Hands appear (0s - 0.5s)
-        this.scheduleAction(0, () => this.showHands());
-        
-        // Step 2: Selection box appears (0.8s - 1.5s)
-        this.scheduleAction(800, () => this.showSelectionBox());
-        
-        // Step 3: Processing indicator appears (1.5s - 2.5s)
-        this.scheduleAction(1500, () => this.showProcessing());
-        
-        // Step 4: Caption appears (2.5s - 3.5s)
-        this.scheduleAction(2500, () => this.showCaption());
-        
-        // Reset and restart animation (4s)
-        this.scheduleAction(duration, () => {
+        const drawDuration = 1200;
+        const processDelay = 400;
+        const typeDelay = 600;
+        const cycleDelay = 2200;
+
+        this.schedule(() => this.drawCaptureBox(drawDuration), 150);
+        this.schedule(() => this.showProcessing(), 150 + drawDuration + processDelay);
+        this.schedule(() => this.typeCaption(false), 150 + drawDuration + processDelay + typeDelay);
+        this.schedule(() => {
             this.resetAnimation();
-            setTimeout(() => this.playAnimation(), 1000);
+            if (this.isAnimating) {
+                this.playAnimation();
+            }
+        }, 150 + drawDuration + processDelay + typeDelay + cycleDelay);
+    }
+
+    schedule(action, delay) {
+        clearTimeout(this.sequenceTimer);
+        this.sequenceTimer = setTimeout(action, delay);
+    }
+
+    drawCaptureBox(duration) {
+        if (!this.captureBox) return;
+        const length = this.captureBox.getTotalLength();
+        this.captureBox.classList.add('is-drawing');
+        this.captureBox.style.strokeDasharray = '18 12';
+        this.captureBox.style.strokeDashoffset = length;
+        requestAnimationFrame(() => {
+            this.captureBox.style.transition = `stroke-dashoffset ${duration}ms ease-in-out, opacity 300ms ease-in-out`;
+            this.captureBox.style.strokeDashoffset = '0';
         });
     }
 
-    scheduleAction(delay, action) {
-        setTimeout(action, delay / this.animationSpeed);
-    }
-
-    showHands() {
-        const hands = this.demoSvg.querySelector('.hands');
-        if (hands) {
-            hands.style.transition = 'opacity 0.5s ease-in';
-            hands.setAttribute('opacity', '1');
-        }
-    }
-
-    showSelectionBox() {
-        const hands = this.demoSvg.querySelector('.hands');
-        const selectionBox = this.demoSvg.querySelector('.selection-box');
-        
-        if (hands) {
-            hands.style.transition = 'opacity 0.3s ease-out';
-            hands.setAttribute('opacity', '0.3');
-        }
-        
-        if (selectionBox) {
-            selectionBox.style.transition = 'opacity 0.6s ease-in';
-            selectionBox.setAttribute('opacity', '1');
-            
-            // Animate selection box appearance
-            const rect = selectionBox.querySelector('rect');
-            if (rect) {
-                rect.style.animation = 'draw-box 0.6s ease-in forwards';
-            }
-        }
-    }
-
     showProcessing() {
-        const selectionBox = this.demoSvg.querySelector('.selection-box');
-        const processing = this.demoSvg.querySelector('.processing');
-        
-        if (selectionBox) {
-            selectionBox.style.transition = 'opacity 0.3s ease-out';
-            selectionBox.setAttribute('opacity', '0.5');
-        }
-        
-        if (processing) {
-            processing.style.transition = 'opacity 0.5s ease-in';
-            processing.setAttribute('opacity', '1');
-            
-            // Pulse animation on processing indicator
-            const circle = processing.querySelector('circle:first-of-type');
-            if (circle) {
-                circle.style.animation = 'pulse 1s ease-in-out infinite';
-            }
+        if (this.processing) {
+            this.processing.classList.add('is-active');
         }
     }
 
-    showCaption() {
-        const processing = this.demoSvg.querySelector('.processing');
-        const caption = this.demoSvg.querySelector('.caption-overlay');
-        
-        if (processing) {
-            processing.style.transition = 'opacity 0.3s ease-out';
-            processing.setAttribute('opacity', '0');
+    typeCaption(instant) {
+        if (!this.captionText) return;
+        const fullText = this.captionText.dataset.fulltext || '';
+        this.captionText.textContent = '';
+        if (this.captionCaret) {
+            this.captionCaret.classList.add('is-active');
         }
-        
-        if (caption) {
-            caption.style.transition = 'opacity 0.8s ease-in';
-            caption.setAttribute('opacity', '1');
-            
-            // Glow effect on caption
-            const captionBox = caption.querySelector('rect');
-            if (captionBox) {
-                captionBox.style.animation = 'glow-box 1s ease-in-out infinite';
+
+        if (instant) {
+            this.captionText.textContent = fullText;
+            return;
+        }
+
+        let index = 0;
+        clearInterval(this.typingTimer);
+        this.typingTimer = setInterval(() => {
+            this.captionText.textContent += fullText[index] || '';
+            index += 1;
+            if (index >= fullText.length) {
+                clearInterval(this.typingTimer);
+                this.typingTimer = null;
             }
-        }
+        }, 55);
+    }
+
+    startHandSequence() {
+        if (!this.leftHand || !this.rightHand) return;
+
+        const leftFrames = ['🤟', '🖐️', '🤟', '👌'];
+        const rightFrames = ['✋', '🤟', '✋', '👌'];
+        let frameIndex = 0;
+
+        clearInterval(this.handTimer);
+        this.handTimer = setInterval(() => {
+            this.leftHand.textContent = leftFrames[frameIndex % leftFrames.length];
+            this.rightHand.textContent = rightFrames[frameIndex % rightFrames.length];
+            frameIndex += 1;
+        }, 600);
+    }
+
+    stopSequence() {
+        this.isAnimating = false;
+        clearTimeout(this.sequenceTimer);
+        clearInterval(this.typingTimer);
+        clearInterval(this.handTimer);
+        this.sequenceTimer = null;
+        this.typingTimer = null;
+        this.handTimer = null;
+        this.resetAnimation();
     }
 }
 
 // Add required CSS animations
 function injectDemoAnimationStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes draw-box {
-            0% {
-                stroke-dasharray: 1000;
-                stroke-dashoffset: 1000;
-            }
-            100% {
-                stroke-dasharray: 1000;
-                stroke-dashoffset: 0;
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                r: 8;
-                opacity: 0.8;
-            }
-            50% {
-                r: 12;
-                opacity: 0.4;
-            }
-        }
-
-        @keyframes glow-box {
-            0%, 100% {
-                fill-opacity: 0.1;
-            }
-            50% {
-                fill-opacity: 0.2;
-            }
-        }
-    `;
-    document.head.appendChild(style);
+    // No-op: styles now live in CSS
 }
 
 // Initialize demo animation
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-        injectDemoAnimationStyles();
         new DemoAnimation();
     });
 } else {
-    injectDemoAnimationStyles();
     new DemoAnimation();
 }
 

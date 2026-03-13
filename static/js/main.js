@@ -281,6 +281,7 @@ function updateNavFromScroll() {
     const scrollPos = window.scrollY + 150;
     const sections = [
         { hash: '#home', element: document.querySelector('.hero'), top: 0 },
+        { hash: '#demo', element: document.querySelector('#demo'), top: 0 },
         { hash: '#why-matters', element: document.querySelector('#why-matters'), top: 0 },
         { hash: '#how-works', element: document.querySelector('#how-works'), top: 0 },
         { hash: '#download', element: document.querySelector('#download'), top: 0 },
