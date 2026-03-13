@@ -47,6 +47,7 @@ function getSystemTheme() {
 let lastScrollTime = 0;
 let scrollTimeout;
 const SCROLL_DEBOUNCE = 100;
+let suppressScrollSpyUntil = 0;
 
 // Initialize application
 function initApp() {
@@ -98,6 +99,7 @@ function initHashNavigation() {
             if (!targetSection) return;
 
             e.preventDefault();
+            suppressScrollSpyUntil = Date.now() + 1200;
 
             if (window.location.hash !== targetHash) {
                 window.location.hash = targetHash;
@@ -130,7 +132,9 @@ function handleHashNavigation() {
         : document.querySelector(hash);
 
     if (targetSection) {
+        suppressScrollSpyUntil = Math.max(suppressScrollSpyUntil, Date.now() + 1200);
         scrollToSection(targetSection);
+        updateNavState();
     }
 }
 
@@ -272,6 +276,7 @@ function initMobileNav() {
 // Update nav based on scroll position
 function updateNavFromScroll() {
     if (!isHomePage()) return;
+    if (Date.now() < suppressScrollSpyUntil) return;
 
     const scrollPos = window.scrollY + 150;
     const sections = [
