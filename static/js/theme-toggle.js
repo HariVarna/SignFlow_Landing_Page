@@ -44,7 +44,11 @@ class ThemeToggle {
         const currentTheme = savedTheme || systemTheme;
 
         // Apply the theme on page load
-        this.setTheme(currentTheme, false);
+        if (savedTheme) {
+            this.setTheme(currentTheme, true);
+        } else {
+            this.setTheme(currentTheme, false);
+        }
 
         // Add click listener to toggle button
         this.themeToggleBtn.addEventListener('click', () => this.toggleTheme());

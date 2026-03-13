@@ -261,6 +261,83 @@
     </div>
 </section>
 
+<!-- Login Section -->
+<section id="login" class="login-section">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Welcome Back</h1>
+                <p>Sign in to your SignFlow account</p>
+            </div>
+
+            <form class="login-form" action="{{ url_for('login') }}" method="POST">
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" name="email" placeholder="you@example.com" autocomplete="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" placeholder="••••••••" autocomplete="current-password" required>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-group">
+                        <input type="checkbox" name="remember">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="{{ url_for('contact') }}" class="forgot-password">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+            </form>
+
+            <div class="login-divider">
+                <span>or</span>
+            </div>
+
+            <div class="social-login">
+                <button class="btn btn-social" disabled>
+                    <span>Sign in with GitHub</span>
+                </button>
+                <button class="btn btn-social" disabled>
+                    <span>Sign in with Google</span>
+                </button>
+            </div>
+
+            <div class="login-footer">
+                <p>Don't have an account? <a href="{{ url_for('contact') }}">Sign up here</a></p>
+            </div>
+        </div>
+
+        <div class="login-info">
+            <h2>SignFlow Account Benefits</h2>
+            <ul>
+                <li>
+                    <span class="benefit-icon">⚙️</span>
+                    <span>Customize your preferences</span>
+                </li>
+                <li>
+                    <span class="benefit-icon">📊</span>
+                    <span>Track your caption history</span>
+                </li>
+                <li>
+                    <span class="benefit-icon">🔄</span>
+                    <span>Sync across devices</span>
+                </li>
+                <li>
+                    <span class="benefit-icon">👥</span>
+                    <span>Access community features</span>
+                </li>
+                <li>
+                    <span class="benefit-icon">🎯</span>
+                    <span>Priority support</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
 {% endblock %}
 
 {% block scripts %}

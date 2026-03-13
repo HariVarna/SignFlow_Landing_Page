@@ -284,7 +284,8 @@ function updateNavFromScroll() {
         { hash: '#why-matters', element: document.querySelector('#why-matters'), top: 0 },
         { hash: '#how-works', element: document.querySelector('#how-works'), top: 0 },
         { hash: '#download', element: document.querySelector('#download'), top: 0 },
-        { hash: '#donate', element: document.querySelector('#donate'), top: 0 }
+        { hash: '#donate', element: document.querySelector('#donate'), top: 0 },
+        { hash: '#login', element: document.querySelector('#login'), top: 0 }
     ];
 
     let activeHash = '#home';
