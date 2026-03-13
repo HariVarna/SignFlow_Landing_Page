@@ -460,6 +460,10 @@ body {
     border: 2px solid var(--border-color);
     box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.04);
     overflow: hidden;
+    --sel-left: 18%;
+    --sel-top: 12%;
+    --sel-width: 64%;
+    --sel-height: 70%;
 }
 
 .demo-hands {
@@ -472,7 +476,7 @@ body {
     font-size: 72px;
     opacity: 0.92;
     transform: translateY(0);
-    animation: hands-bob 2.2s ease-in-out infinite;
+    animation: hands-bob 3.4s ease-in-out infinite;
 }
 
 .hand-emoji {
@@ -487,17 +491,44 @@ body {
     height: 100%;
 }
 
-.capture-box {
-    fill: none;
-    stroke: var(--accent);
-    stroke-width: 3;
-    stroke-dasharray: 18 12;
-    stroke-linecap: round;
+.selection-box {
+    position: absolute;
+    left: var(--sel-left);
+    top: var(--sel-top);
+    width: 0;
+    height: 0;
+    border: 3px dashed var(--accent);
+    border-radius: 18px;
     opacity: 0;
+    transform-origin: top left;
+    box-sizing: border-box;
 }
 
-.capture-box.is-drawing {
+.selection-box.is-drawing {
     opacity: 1;
+}
+
+.demo-cursor {
+    position: absolute;
+    left: var(--sel-left);
+    top: var(--sel-top);
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+    transform: translate(0, 0) scale(0.95);
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
+}
+
+.demo-cursor.is-dragging {
+    opacity: 1;
+}
+
+.cursor-icon {
+    width: 100%;
+    height: 100%;
+    fill: var(--text-primary);
+    stroke: var(--bg-primary);
+    stroke-width: 1.5;
 }
 
 .demo-processing {
@@ -507,6 +538,7 @@ body {
     display: flex;
     gap: 8px;
     opacity: 0;
+    transition: opacity 200ms ease;
 }
 
 .demo-processing.is-active {
@@ -539,6 +571,17 @@ body {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity 300ms ease, transform 300ms ease, visibility 0ms linear 300ms;
+}
+
+.demo-caption.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0ms;
 }
 
 .caption-label {
@@ -580,7 +623,7 @@ body {
 
 @keyframes hands-bob {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-6px); }
 }
 
 @keyframes processing-pulse {
@@ -591,6 +634,33 @@ body {
 @keyframes caret-blink {
     0%, 100% { opacity: 0; }
     50% { opacity: 1; }
+}
+
+@keyframes rect-draw {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+    20% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        width: var(--sel-width);
+        height: var(--sel-height);
+        opacity: 1;
+    }
+}
+
+@keyframes cursor-drag {
+    0% { opacity: 0; left: var(--sel-left); top: var(--sel-top); transform: scale(0.9); }
+    12% { opacity: 1; left: var(--sel-left); top: var(--sel-top); transform: scale(1); }
+    18% { opacity: 1; left: var(--sel-left); top: var(--sel-top); transform: scale(0.92); }
+    24% { opacity: 1; left: var(--sel-left); top: var(--sel-top); transform: scale(1); }
+    90% { opacity: 1; left: calc(var(--sel-left) + var(--sel-width) - 10px); top: calc(var(--sel-top) + var(--sel-height) - 10px); transform: scale(1); }
+    100% { opacity: 0; left: calc(var(--sel-left) + var(--sel-width) - 10px); top: calc(var(--sel-top) + var(--sel-height) - 10px); transform: scale(0.95); }
 }
 
 .demo-detail-anchor {

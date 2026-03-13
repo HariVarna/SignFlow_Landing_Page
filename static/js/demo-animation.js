@@ -10,15 +10,17 @@ function prefersReducedMotion() {
 class DemoAnimation {
     constructor() {
         this.demoStage = document.querySelector('.demo-stage');
-        this.captureBox = document.querySelector('.capture-box');
+        this.selectionBox = document.querySelector('.selection-box');
+        this.cursor = document.querySelector('.demo-cursor');
         this.processing = document.querySelector('.demo-processing');
+        this.captionBox = document.querySelector('.demo-caption');
         this.captionText = document.querySelector('.caption-text');
         this.captionCaret = document.querySelector('.caption-caret');
         this.leftHand = document.querySelector('.hand-left');
         this.rightHand = document.querySelector('.hand-right');
         this.isAnimating = false;
         this.typingTimer = null;
-        this.sequenceTimer = null;
+        this.sequenceTimers = [];
         this.handTimer = null;
 
         if (this.demoStage) {
@@ -27,8 +29,9 @@ class DemoAnimation {
     }
 
     init() {
+        this.resetAnimation();
+
         if (prefersReducedMotion()) {
-            this.resetAnimation();
             this.typeCaption(true);
             return;
         }
@@ -54,22 +57,34 @@ class DemoAnimation {
     startSequence() {
         if (this.isAnimating) return;
         this.isAnimating = true;
+        this.sequenceTimers.forEach(timer => clearTimeout(timer));
+        this.sequenceTimers = [];
         this.startHandSequence();
         this.resetAnimation();
         this.playAnimation();
     }
 
     resetAnimation() {
-        if (this.captureBox) {
-            this.captureBox.classList.remove('is-drawing');
-            this.captureBox.style.strokeDasharray = '18 12';
-            const length = this.captureBox.getTotalLength();
-            this.captureBox.style.strokeDashoffset = length;
-            this.captureBox.style.transition = 'none';
+        if (this.selectionBox) {
+            this.selectionBox.classList.remove('is-drawing');
+            this.selectionBox.style.animation = 'none';
+            this.selectionBox.style.width = '0';
+            this.selectionBox.style.height = '0';
+            this.selectionBox.style.opacity = '0';
+        }
+
+        if (this.cursor) {
+            this.cursor.classList.remove('is-dragging');
+            this.cursor.style.animation = 'none';
+            this.cursor.style.opacity = '0';
         }
 
         if (this.processing) {
             this.processing.classList.remove('is-active');
+        }
+
+        if (this.captionBox) {
+            this.captionBox.classList.remove('is-visible');
         }
 
         if (this.captionText) {
@@ -82,37 +97,53 @@ class DemoAnimation {
     }
 
     playAnimation() {
-        const drawDuration = 1200;
-        const processDelay = 400;
-        const typeDelay = 600;
-        const cycleDelay = 2200;
+        const dragDuration = 2000;
+        const processDelay = 800;
+        const typingDelay = 500;
+        const holdDuration = 3000;
+        const typingInterval = 80;
+        const text = (this.captionText && this.captionText.dataset.fulltext) || '';
+        const typingDuration = Math.max(text.length * typingInterval, 600);
 
-        this.schedule(() => this.drawCaptureBox(drawDuration), 150);
-        this.schedule(() => this.showProcessing(), 150 + drawDuration + processDelay);
-        this.schedule(() => this.typeCaption(false), 150 + drawDuration + processDelay + typeDelay);
+        this.sequenceTimers = [];
+        this.schedule(() => this.drawSelection(dragDuration), 200);
+        this.schedule(() => this.showProcessing(), 200 + dragDuration + 150);
+        this.schedule(
+            () => this.typeCaption(false, typingInterval),
+            200 + dragDuration + processDelay + typingDelay
+        );
+        this.schedule(
+            () => this.resetAnimation(),
+            200 + dragDuration + processDelay + typingDelay + typingDuration + holdDuration
+        );
         this.schedule(() => {
-            this.resetAnimation();
             if (this.isAnimating) {
                 this.playAnimation();
             }
-        }, 150 + drawDuration + processDelay + typeDelay + cycleDelay);
+        }, 200 + dragDuration + processDelay + typingDelay + typingDuration + holdDuration + 600);
     }
 
     schedule(action, delay) {
-        clearTimeout(this.sequenceTimer);
-        this.sequenceTimer = setTimeout(action, delay);
+        const timer = setTimeout(action, delay);
+        this.sequenceTimers.push(timer);
     }
 
-    drawCaptureBox(duration) {
-        if (!this.captureBox) return;
-        const length = this.captureBox.getTotalLength();
-        this.captureBox.classList.add('is-drawing');
-        this.captureBox.style.strokeDasharray = '18 12';
-        this.captureBox.style.strokeDashoffset = length;
-        requestAnimationFrame(() => {
-            this.captureBox.style.transition = `stroke-dashoffset ${duration}ms ease-in-out, opacity 300ms ease-in-out`;
-            this.captureBox.style.strokeDashoffset = '0';
-        });
+    drawSelection(duration) {
+        if (this.selectionBox) {
+            this.selectionBox.style.animation = 'none';
+            this.selectionBox.style.width = '0';
+            this.selectionBox.style.height = '0';
+            void this.selectionBox.offsetWidth;
+            this.selectionBox.classList.add('is-drawing');
+            this.selectionBox.style.animation = `rect-draw ${duration}ms ease-in-out forwards`;
+        }
+
+        if (this.cursor) {
+            this.cursor.style.animation = 'none';
+            void this.cursor.offsetWidth;
+            this.cursor.classList.add('is-dragging');
+            this.cursor.style.animation = `cursor-drag ${duration}ms ease-in-out forwards`;
+        }
     }
 
     showProcessing() {
@@ -121,12 +152,18 @@ class DemoAnimation {
         }
     }
 
-    typeCaption(instant) {
+    typeCaption(instant, interval = 55) {
         if (!this.captionText) return;
         const fullText = this.captionText.dataset.fulltext || '';
         this.captionText.textContent = '';
         if (this.captionCaret) {
             this.captionCaret.classList.add('is-active');
+        }
+        if (this.captionBox) {
+            this.captionBox.classList.add('is-visible');
+        }
+        if (this.processing) {
+            this.processing.classList.remove('is-active');
         }
 
         if (instant) {
@@ -143,7 +180,7 @@ class DemoAnimation {
                 clearInterval(this.typingTimer);
                 this.typingTimer = null;
             }
-        }, 55);
+        }, interval);
     }
 
     startHandSequence() {
@@ -163,12 +200,14 @@ class DemoAnimation {
 
     stopSequence() {
         this.isAnimating = false;
-        clearTimeout(this.sequenceTimer);
+        this.sequenceTimers.forEach(timer => clearTimeout(timer));
+        this.sequenceTimers = [];
         clearInterval(this.typingTimer);
         clearInterval(this.handTimer);
-        this.sequenceTimer = null;
         this.typingTimer = null;
         this.handTimer = null;
+        if (this.leftHand) this.leftHand.textContent = '🤟';
+        if (this.rightHand) this.rightHand.textContent = '✋';
         this.resetAnimation();
     }
 }
