@@ -16,24 +16,23 @@
 
 <nav class="navbar">
 
-<div class="logo">SignFlow</div>
+<div class="logo-container">
+<img src="assets/signflow-logo.png" class="logo-img">
+<span class="logo-text">SignFlow</span>
+</div>
 
 <ul class="nav-links">
-
 <li><a href="#home">Home</a></li>
 <li><a href="#download">Download</a></li>
 <li><a href="#features">Features</a></li>
 <li><a href="#about">About</a></li>
 <li><a href="#donate">Donate</a></li>
 <li><a href="#contact">Contact</a></li>
-
 </ul>
 
 <div class="auth-buttons">
-
 <a href="login.html">Login</a>
-<a class="register-highlight" href="login.html">Register</a>
-
+<a class="register-btn" href="login.html">Register</a>
 </div>
 
 </nav>
@@ -42,64 +41,49 @@
 
 <section id="home" class="hero">
 
-<div class="hero-text">
+<img src="assets/signflow-logo.png" class="hero-logo">
 
 <h1>Real-Time Sign Language → English Captions</h1>
 
 <p>
 SignFlow captures a video region, detects sign language gestures using AI,
-and converts them into live English captions displayed as an overlay
-on any video platform.
+and converts them into live captions displayed on any video platform.
 </p>
 
 <a class="cta" href="#download">Download SignFlow</a>
 
-</div>
-
-<img src="./assets/demo.gif">
-
 </section>
 
 
 
-<section id="download" class="section download-section">
+<!-- DOWNLOAD SECTION -->
+
+<section id="download" class="download-section">
 
 <h2>Download SignFlow</h2>
 
-<p class="download-subtitle">Download for</p>
+<p class="subtitle">Choose your platform</p>
 
-<div class="platform-buttons">
+<div class="download-row">
 
-<a class="platform-btn">
-
-<img src="./assets/windows.png">
-
+<a class="download-btn">
+<img src="https://cdn.simpleicons.org/windows/0078D6">
 <span>Windows</span>
-
 </a>
 
-<a class="platform-btn">
-
-<img src="./assets/mac.png">
-
+<a class="download-btn">
+<img src="https://cdn.simpleicons.org/apple/000000">
 <span>Mac</span>
-
 </a>
 
-<a class="platform-btn">
-
-<img src="./assets/linux.png">
-
+<a class="download-btn">
+<img src="https://cdn.simpleicons.org/linux/FCC624">
 <span>Linux</span>
-
 </a>
 
-<a class="platform-btn">
-
-<img src="./assets/android.png">
-
+<a class="download-btn">
+<img src="https://cdn.simpleicons.org/android/3DDC84">
 <span>Android</span>
-
 </a>
 
 </div>
@@ -107,32 +91,28 @@ on any video platform.
 </section>
 
 
+
+<!-- FEATURES -->
 
 <section id="features" class="section">
 
 <h2>Features</h2>
 
-<div class="card-grid">
+<div class="features">
 
-<div class="card">
-
+<div class="feature">
 <h3>Real-Time Detection</h3>
 <p>Detect sign language gestures instantly.</p>
-
 </div>
 
-<div class="card">
-
+<div class="feature">
 <h3>Live Caption Overlay</h3>
-<p>Captions appear directly on video.</p>
-
+<p>Captions appear directly on the video.</p>
 </div>
 
-<div class="card">
-
+<div class="feature">
 <h3>Region Capture</h3>
-<p>Select the video area to detect gestures.</p>
-
+<p>Select the video area for detection.</p>
 </div>
 
 </div>
@@ -146,8 +126,8 @@ on any video platform.
 <h2>About SignFlow</h2>
 
 <p>
-SignFlow is an accessibility project designed to convert sign language gestures
-into readable English captions in real time.
+SignFlow is an accessibility project designed to convert sign language
+gestures into readable English captions in real time.
 </p>
 
 </section>
@@ -159,34 +139,67 @@ into readable English captions in real time.
 <h2>Support SignFlow</h2>
 
 <button>Donate via Stripe</button>
-
 <button>Buy Me A Coffee</button>
 
 </section>
 
 
 
-<section id="contact" class="section">
+<!-- CONTACT SECTION -->
+
+<section id="contact" class="section contact-section">
 
 <h2>Contact</h2>
 
-<form class="contact-form">
+<div class="contact-info">
 
-<input type="text" placeholder="Name">
+<div class="contact-item">
+<img src="https://cdn.simpleicons.org/gmail">
+<div>
+<h4>Email</h4>
+<p>yourmail@gmail.com</p>
+</div>
+</div>
 
-<input type="email" placeholder="Email">
+<div class="contact-item">
+<img src="https://cdn.simpleicons.org/phone">
+<div>
+<h4>Phone</h4>
+<p>+91 00000 00000</p>
+</div>
+</div>
 
-<textarea placeholder="Message"></textarea>
+<div class="contact-item">
+<img src="https://cdn.simpleicons.org/github">
+<div>
+<h4>GitHub</h4>
+<p>github.com/yourusername</p>
+</div>
+</div>
 
-<button>Send Message</button>
+<div class="contact-item">
+<img src="https://cdn.simpleicons.org/linkedin">
+<div>
+<h4>LinkedIn</h4>
+<p>linkedin.com/in/yourusername</p>
+</div>
+</div>
 
-</form>
+<div class="contact-item">
+<img src="https://cdn.simpleicons.org/instagram">
+<div>
+<h4>Instagram</h4>
+<p>@yourusername</p>
+</div>
+</div>
+
+</div>
 
 </section>
 
 
 
-<footer class="footer">
+<footer>
 
 <p>© 2026 SignFlow</p>
 
