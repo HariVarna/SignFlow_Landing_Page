@@ -17,8 +17,93 @@ const DEMO_MOTION = {
     postDragDelay: 180,
     loopPause: 700,
     typingDefault: 65,
-    handInterval: 750
+    handInterval: 380
 };
+
+const HAND_ICON_FRAMES = [
+    { name: 'hand', fallback: '🤟' },
+    { name: 'hand-fist', fallback: '✊' },
+    { name: 'hand-grab', fallback: '👌' },
+    { name: 'hand-metal', fallback: '🤟' },
+    { name: 'hand', fallback: '🤟' },
+    { name: 'hand-fist', fallback: '✊' },
+    { name: 'hand-grab', fallback: '👌' },
+    { name: 'hand-metal', fallback: '🤟' }
+];
+
+const HAND_ICON_FRAMES_ALT = [
+    { name: 'hand-grab', fallback: '👌' },
+    { name: 'hand', fallback: '🤟' },
+    { name: 'hand-metal', fallback: '🤟' },
+    { name: 'hand-fist', fallback: '✊' },
+    { name: 'hand-grab', fallback: '👌' },
+    { name: 'hand-metal', fallback: '🤟' },
+    { name: 'hand', fallback: '🤟' },
+    { name: 'hand-fist', fallback: '✊' }
+];
+
+const HAND_MOTION_SHIFTS = [0];
+
+function toPascalCase(name) {
+    return name.replace(/(^\w|[-_]\w)/g, (match) => match.replace(/[-_]/, '').toUpperCase());
+}
+
+function createLucideSvg(name, size = 72) {
+    if (!window.lucide || !window.lucide.icons || !window.lucide.createElement) return null;
+    const key = toPascalCase(name);
+    const iconDef = window.lucide.icons[key];
+    if (!iconDef) return null;
+    const svg = window.lucide.createElement(iconDef, {
+        width: size,
+        height: size,
+        class: 'hand-svg',
+        'stroke-width': 1.8
+    });
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    gradient.setAttribute('id', 'hand-neon-gradient');
+    gradient.setAttribute('x1', '0');
+    gradient.setAttribute('y1', '0');
+    gradient.setAttribute('x2', '1');
+    gradient.setAttribute('y2', '1');
+
+    const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop1.setAttribute('offset', '0%');
+    stop1.setAttribute('class', 'hand-neon-stop-1');
+    const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop2.setAttribute('offset', '50%');
+    stop2.setAttribute('class', 'hand-neon-stop-2');
+    const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop3.setAttribute('offset', '100%');
+    stop3.setAttribute('class', 'hand-neon-stop-3');
+
+    gradient.appendChild(stop1);
+    gradient.appendChild(stop2);
+    gradient.appendChild(stop3);
+    defs.appendChild(gradient);
+    svg.insertBefore(defs, svg.firstChild);
+    return svg;
+}
+
+function setHandIcon(element, frame) {
+    if (!element) return;
+    const svg = createLucideSvg(frame.name, 72);
+    if (!svg) {
+        element.textContent = frame.fallback || element.dataset.fallback || '';
+        return;
+    }
+
+    element.textContent = '';
+    element.appendChild(svg);
+}
+
+function setHandMotion(element, index, direction) {
+    if (!element) return;
+    const shift = HAND_MOTION_SHIFTS[index % HAND_MOTION_SHIFTS.length];
+    element.style.setProperty('--hand-rotate', '0deg');
+    element.style.setProperty('--hand-shift', `${shift}px`);
+    element.style.setProperty('--hand-shift-x', '0px');
+}
 
 class DemoAnimation {
     constructor() {
@@ -198,8 +283,26 @@ class DemoAnimation {
 
     startHandSequence() {
         if (!this.leftHand || !this.rightHand) return;
+        let leftIndex = 0;
+        let rightIndex = 3;
+        let motionIndex = 0;
+
         clearInterval(this.handTimer);
-        this.handTimer = null;
+        setHandIcon(this.leftHand, HAND_ICON_FRAMES[leftIndex % HAND_ICON_FRAMES.length]);
+        setHandIcon(this.rightHand, HAND_ICON_FRAMES_ALT[rightIndex % HAND_ICON_FRAMES_ALT.length]);
+        setHandMotion(this.leftHand, motionIndex, 'left');
+        setHandMotion(this.rightHand, motionIndex, 'right');
+        this.handTimer = setInterval(() => {
+            const leftFrame = HAND_ICON_FRAMES[leftIndex % HAND_ICON_FRAMES.length];
+            const rightFrame = HAND_ICON_FRAMES_ALT[rightIndex % HAND_ICON_FRAMES_ALT.length];
+            setHandIcon(this.leftHand, leftFrame);
+            setHandIcon(this.rightHand, rightFrame);
+            setHandMotion(this.leftHand, motionIndex, 'left');
+            setHandMotion(this.rightHand, motionIndex, 'right');
+            leftIndex += 1;
+            rightIndex += 1;
+            motionIndex += 1;
+        }, DEMO_MOTION.handInterval);
     }
 
     stopSequence() {
@@ -210,6 +313,18 @@ class DemoAnimation {
         clearInterval(this.handTimer);
         this.typingTimer = null;
         this.handTimer = null;
+        if (this.leftHand) {
+            this.leftHand.style.removeProperty('--hand-rotate');
+            this.leftHand.style.removeProperty('--hand-shift');
+            this.leftHand.style.removeProperty('--hand-shift-x');
+            this.leftHand.style.removeProperty('--hand-scale');
+        }
+        if (this.rightHand) {
+            this.rightHand.style.removeProperty('--hand-rotate');
+            this.rightHand.style.removeProperty('--hand-shift');
+            this.rightHand.style.removeProperty('--hand-shift-x');
+            this.rightHand.style.removeProperty('--hand-scale');
+        }
         this.resetAnimation();
     }
 }
