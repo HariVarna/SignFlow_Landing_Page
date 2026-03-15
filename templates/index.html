@@ -99,8 +99,6 @@
 <!-- How SignFlow Works Section -->
 <section class="how-it-works" id="how-works">
     <h2>The SignFlow Pipeline</h2>
-    <p class="section-subtitle">From video to captions in milliseconds</p>
-    
     <div class="vertical-pipeline">
         <!-- Stage 1 -->
         <div class="pipeline-item">
@@ -172,6 +170,28 @@
         <div class="pipeline-item">
             <div class="pipeline-content">
                 <div class="stage-number">04</div>
+                <div class="stage-icon">&#129504;</div>
+                <h3>LLM Smoothing</h3>
+                <p>LLM refines ASL grammar into natural English phrasing</p>
+            </div>
+        </div>
+
+        <!-- Connector -->
+        <div class="pipeline-connector">
+            <svg width="40" height="60" viewBox="0 0 40 60" preserveAspectRatio="none">
+                <defs>
+                    <marker id="arrowdown4" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+                        <polygon points="0 0, 8 4, 0 8" fill="currentColor" />
+                    </marker>
+                </defs>
+                <line x1="20" y1="4" x2="20" y2="54" stroke="currentColor" stroke-width="2.5" marker-end="url(#arrowdown4)" stroke-linecap="round" />
+            </svg>
+        </div>
+
+        <!-- Stage 5 -->
+        <div class="pipeline-item">
+            <div class="pipeline-content">
+                <div class="stage-number">05</div>
                 <div class="stage-icon">💬</div>
                 <h3>Live Captions</h3>
                 <p>English text appears instantly in overlay</p>
@@ -217,25 +237,25 @@
             <div class="recommended-badge">Recommended</div>
             <h3>Windows</h3>
             <p class="download-description">SignFlow for Windows 10+</p>
-            <a href="{{ url_for('download') }}" class="btn btn-primary">Download for Windows</a>
+            <a href="{{ url_for('download_windows') }}" class="btn btn-primary">Download for Windows</a>
             <p class="version-info">Latest: v1.0.0</p>
         </div>
         <div class="download-card">
             <h3>Linux</h3>
             <p class="download-description">Experimental build for Linux</p>
-            <a href="{{ url_for('download') }}" class="btn btn-secondary">Download for Linux</a>
+            <a href="{{ url_for('download_linux') }}" class="btn btn-secondary">Download for Linux</a>
             <p class="version-info">Latest: v1.0.0-beta</p>
         </div>
         <div class="download-card">
             <h3>macOS</h3>
             <p class="download-description">Coming in the next release</p>
-            <button class="btn btn-disabled" disabled>Coming Soon</button>
+            <a href="{{ url_for('download_macos') }}" class="btn btn-disabled" aria-disabled="true">Coming Soon</a>
             <p class="version-info">Q4 2026</p>
         </div>
         <div class="download-card">
             <h3>Android</h3>
             <p class="download-description">SignFlow mobile application</p>
-            <a href="{{ url_for('download') }}" class="btn btn-secondary">Download for Android</a>
+            <a href="{{ url_for('download_android') }}" class="btn btn-secondary">Download for Android</a>
             <p class="version-info">Latest: v1.0.0</p>
         </div>
     </div>
@@ -271,7 +291,7 @@
         </div>
 
         <div class="github-cta">
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">View on GitHub</a>
+            <a href="https://github.com/mano-dev-01/SignFlow-Core" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">View on GitHub</a>
         </div>
     </div>
 </section>
@@ -286,17 +306,17 @@
             <div class="donation-card">
                 <div class="donation-amount">$5</div>
                 <p class="donation-desc">Coffee & Development</p>
-                <button class="btn btn-secondary">Donate</button>
+                <a href="{{ url_for('donate', amount=5) }}" class="btn btn-secondary">Donate</a>
             </div>
             <div class="donation-card featured">
                 <div class="donation-amount">$25</div>
                 <p class="donation-desc">Monthly Supporter</p>
-                <button class="btn btn-primary">Donate</button>
+                <a href="{{ url_for('donate', amount=25) }}" class="btn btn-primary">Donate</a>
             </div>
             <div class="donation-card">
                 <div class="donation-amount">$100</div>
                 <p class="donation-desc">Research & Innovation</p>
-                <button class="btn btn-secondary">Donate</button>
+                <a href="{{ url_for('donate', amount=100) }}" class="btn btn-secondary">Donate</a>
             </div>
         </div>
 
@@ -349,12 +369,12 @@
                 </div>
 
                 <div class="social-login">
-                    <button class="btn btn-social" disabled>
+                    <a class="btn btn-social" href="{{ url_for('auth_github') }}">
                         <span>Sign in with GitHub</span>
-                    </button>
-                    <button class="btn btn-social" disabled>
+                    </a>
+                    <a class="btn btn-social" href="{{ url_for('auth_google') }}">
                         <span>Sign in with Google</span>
-                    </button>
+                    </a>
                 </div>
 
                 <div class="login-footer">

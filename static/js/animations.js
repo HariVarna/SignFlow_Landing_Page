@@ -7,6 +7,18 @@ function prefersReducedMotion() {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+const MOTION = {
+    fade: 1100,
+    logoHover: 400,
+    logoLoad: 800,
+    pulse: 700,
+    slide: 850,
+    scale: 600,
+    stagger: 120
+};
+
+const MOTION_EASE = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
+
 class SignFlowAnimations {
     constructor() {
         this.init();
@@ -41,7 +53,7 @@ class SignFlowAnimations {
             element.style.animation = 'none';
             
             // Create CSS animation based on type
-            const delay = index * 100; // Stagger animation
+            const delay = index * MOTION.stagger; // Stagger animation
             const styleName = `animation-${animationType}-${index}`;
             
             if (animationType === 'fade-in-down') {
@@ -53,23 +65,23 @@ class SignFlowAnimations {
     }
 
     applyFadeInDown(element, delay) {
-        element.style.animation = `fade-in-down 0.8s ease-out ${delay}ms forwards`;
+        element.style.animation = `fade-in-down ${MOTION.fade}ms ${MOTION_EASE} ${delay}ms forwards`;
     }
 
     applyFadeInUp(element, delay) {
-        element.style.animation = `fade-in-up 0.8s ease-out ${delay}ms forwards`;
+        element.style.animation = `fade-in-up ${MOTION.fade}ms ${MOTION_EASE} ${delay}ms forwards`;
     }
 
     setupLogoAnimation() {
         const logo = document.querySelector('.logo-svg');
         if (logo) {
             logo.addEventListener('mouseenter', () => {
-                logo.style.animation = 'logo-hover 0.3s ease-out';
+                logo.style.animation = `logo-hover ${MOTION.logoHover}ms ${MOTION_EASE}`;
             });
 
             // Auto-animate on load
             window.addEventListener('load', () => {
-                logo.style.animation = 'logo-hover 0.6s ease-out';
+                logo.style.animation = `logo-hover ${MOTION.logoLoad}ms ${MOTION_EASE}`;
             });
         }
     }
@@ -78,15 +90,25 @@ class SignFlowAnimations {
         const hero = document.querySelector('.hero');
         if (!hero || prefersReducedMotion()) return;
 
-        // Parallax effect on scroll
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const doodles = document.querySelectorAll('.animated-hand-doodle');
-            
+        // Parallax effect on scroll (smoothed)
+        const doodles = document.querySelectorAll('.animated-hand-doodle');
+        let latestScroll = 0;
+        let ticking = false;
+
+        const updateDoodles = () => {
             doodles.forEach((doodle, index) => {
-                const speed = 0.5 + (index * 0.1);
-                doodle.style.transform = `translateY(${scrolled * speed}px)`;
+                const speed = 0.22 + (index * 0.05);
+                doodle.style.transform = `translate3d(0, ${latestScroll * speed}px, 0)`;
             });
+            ticking = false;
+        };
+
+        window.addEventListener('scroll', () => {
+            latestScroll = window.pageYOffset;
+            if (!ticking) {
+                window.requestAnimationFrame(updateDoodles);
+                ticking = true;
+            }
         }, { passive: true });
 
         // Subtle glow effect on hero title
@@ -154,15 +176,15 @@ class SignFlowAnimations {
     }
 
     animateStatCard(element) {
-        element.style.animation = 'pulse-in 0.5s ease-out';
+        element.style.animation = `pulse-in ${MOTION.pulse}ms ${MOTION_EASE}`;
     }
 
     animateStep(element) {
-        element.style.animation = 'slide-in-up 0.6s ease-out';
+        element.style.animation = `slide-in-up ${MOTION.slide}ms ${MOTION_EASE}`;
     }
 
     animatePlatformCard(element) {
-        element.style.animation = 'scale-in 0.4s ease-out';
+        element.style.animation = `scale-in ${MOTION.scale}ms ${MOTION_EASE}`;
     }
 }
 

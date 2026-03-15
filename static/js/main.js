@@ -27,12 +27,91 @@ const safeStorage = {
     }
 };
 
+const DOODLE_CONFIG = {
+    minCount: 8,
+    maxCount: 20,
+    areaPerDoodle: 140000,
+    minSize: 60,
+    maxSize: 140,
+    minOpacity: 0.04,
+    maxOpacity: 0.08,
+    insetPadding: 6
+};
+
+const DOODLE_SVGS = (() => {
+    const toDataUri = (svg) => `data:image/svg+xml,${encodeURIComponent(svg)}`;
+    const buildSet = (stroke) => ([
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M16 42 C 36 12, 60 72, 86 42 S 124 72, 124 96" stroke="${stroke}" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="18" stroke="${stroke}" stroke-opacity="0.55" stroke-width="2"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M20 100 L70 30 L120 100 Z" stroke="${stroke}" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none"><path d="M60 12 L66 46 L100 52 L66 58 L60 96 L54 58 L20 52 L54 46 Z" stroke="${stroke}" stroke-opacity="0.55" stroke-width="2" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M20 70 C 20 40, 120 40, 120 70 C 120 100, 20 100, 20 70 Z" stroke="${stroke}" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+    ]);
+
+    return {
+        light: buildSet('#000000').map(toDataUri),
+        dark: buildSet('#ffffff').map(toDataUri)
+    };
+})();
+
+let doodleResizeTimer;
+
 function prefersReducedMotion() {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 function isHomePage() {
     return Boolean(document.querySelector('.hero'));
+}
+
+function getDoodleSet() {
+    const theme = document.documentElement.getAttribute('data-theme') || 'light';
+    return theme === 'dark' ? DOODLE_SVGS.dark : DOODLE_SVGS.light;
+}
+
+function buildDoodlesForSection(section, doodles) {
+    if (!section) return;
+
+    let layer = section.querySelector('.doodle-layer');
+    if (!layer) {
+        layer = document.createElement('div');
+        layer.className = 'doodle-layer';
+        layer.setAttribute('aria-hidden', 'true');
+        section.insertBefore(layer, section.firstChild);
+    }
+
+    layer.innerHTML = '';
+
+    const area = section.offsetWidth * section.offsetHeight;
+    const estimated = Math.round(area / DOODLE_CONFIG.areaPerDoodle);
+    const count = Math.min(
+        DOODLE_CONFIG.maxCount,
+        Math.max(DOODLE_CONFIG.minCount, estimated)
+    );
+
+    for (let i = 0; i < count; i += 1) {
+        const doodle = document.createElement('span');
+        doodle.className = 'doodle';
+        const size = DOODLE_CONFIG.minSize + Math.random() * (DOODLE_CONFIG.maxSize - DOODLE_CONFIG.minSize);
+        const top = DOODLE_CONFIG.insetPadding + Math.random() * (100 - DOODLE_CONFIG.insetPadding * 2);
+        const left = DOODLE_CONFIG.insetPadding + Math.random() * (100 - DOODLE_CONFIG.insetPadding * 2);
+
+        doodle.style.width = `${size.toFixed(0)}px`;
+        doodle.style.height = `${size.toFixed(0)}px`;
+        doodle.style.top = `${top.toFixed(2)}%`;
+        doodle.style.left = `${left.toFixed(2)}%`;
+        doodle.style.opacity = (DOODLE_CONFIG.minOpacity + Math.random() * (DOODLE_CONFIG.maxOpacity - DOODLE_CONFIG.minOpacity)).toFixed(2);
+        doodle.style.transform = `rotate(${Math.round(Math.random() * 360)}deg)`;
+        doodle.style.backgroundImage = `url("${doodles[Math.floor(Math.random() * doodles.length)]}")`;
+
+        layer.appendChild(doodle);
+    }
+}
+
+function initDoodleLayers() {
+    const sections = document.querySelectorAll('section, .footer');
+    const doodles = getDoodleSet();
+    sections.forEach(section => buildDoodlesForSection(section, doodles));
 }
 
 // Detect user's system theme preference
@@ -58,6 +137,9 @@ function initApp() {
     // Apply theme
     document.documentElement.setAttribute('data-theme', theme);
 
+    // Initialize random background doodles
+    initDoodleLayers();
+
     // Initialize intersection observer for animations
     initIntersectionObserver();
 
@@ -77,6 +159,15 @@ function initApp() {
             updateNavState();
         }, 150);
     }
+
+    window.addEventListener('themechange', () => {
+        initDoodleLayers();
+    });
+
+    window.addEventListener('resize', () => {
+        clearTimeout(doodleResizeTimer);
+        doodleResizeTimer = setTimeout(initDoodleLayers, 200);
+    }, { passive: true });
 }
 
 // Hash-based navigation system

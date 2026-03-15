@@ -5,10 +5,23 @@ Flask application entry point
 
 import os
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 128 * 1024
+
+
+def render_placeholder(title, description, detail, cta_label='Return home', cta_href=None):
+    if cta_href is None:
+        cta_href = url_for('index')
+    return render_template(
+        'placeholder.html',
+        title=title,
+        description=description,
+        detail=detail,
+        cta_label=cta_label,
+        cta_href=cta_href
+    )
 
 
 @app.after_request
@@ -80,7 +93,7 @@ def contact():
                     'email': email,
                     'subject': subject,
                     'message': message
-                }
+                 }
             ), 400
 
         return render_template(
@@ -103,6 +116,164 @@ def login():
         )
 
     return render_template('login.html')
+
+
+@app.route('/download/windows')
+def download_windows():
+    return render_placeholder(
+        'Windows Download',
+        'Your SignFlow Windows installer will live here.',
+        'We will connect this to release builds and download analytics in a follow-up step.',
+        cta_label='Back to Downloads',
+        cta_href=url_for('download')
+    )
+
+
+@app.route('/download/linux')
+def download_linux():
+    return render_placeholder(
+        'Linux Download',
+        'Your SignFlow Linux build will live here.',
+        'We will connect this to source archives and package manager instructions next.',
+        cta_label='Back to Downloads',
+        cta_href=url_for('download')
+    )
+
+
+@app.route('/download/macos')
+def download_macos():
+    return render_placeholder(
+        'macOS Release',
+        'SignFlow for macOS is on the way.',
+        'We will add a waitlist and release notifications here as soon as builds are ready.',
+        cta_label='Back to Downloads',
+        cta_href=url_for('download')
+    )
+
+
+@app.route('/download/android')
+def download_android():
+    return render_placeholder(
+        'Android Download',
+        'Your SignFlow Android download will live here.',
+        'We will link this to the Play Store listing and APK mirrors when ready.',
+        cta_label='Back to Downloads',
+        cta_href=url_for('download')
+    )
+
+
+@app.route('/donate/<int:amount>')
+def donate(amount):
+    return render_placeholder(
+        f'Donate ${amount}',
+        'Thanks for supporting SignFlow.',
+        'We will connect this to a payment processor and receipts in a follow-up.',
+        cta_label='Back to Donate',
+        cta_href=f"{url_for('index')}#donate"
+    )
+
+
+@app.route('/auth/github')
+def auth_github():
+    return render_placeholder(
+        'GitHub Sign-In',
+        'GitHub OAuth will be wired here.',
+        'We will add the OAuth flow and account linking when authentication is enabled.',
+        cta_label='Back to Sign In',
+        cta_href=url_for('login')
+    )
+
+
+@app.route('/auth/google')
+def auth_google():
+    return render_placeholder(
+        'Google Sign-In',
+        'Google OAuth will be wired here.',
+        'We will add the OAuth flow and account linking when authentication is enabled.',
+        cta_label='Back to Sign In',
+        cta_href=url_for('login')
+    )
+
+
+@app.route('/docs')
+def docs():
+    return render_placeholder(
+        'Documentation',
+        'SignFlow documentation is coming together.',
+        'We will publish setup, usage, and troubleshooting guides here.'
+    )
+
+
+@app.route('/roadmap')
+def roadmap():
+    return render_placeholder(
+        'Product Roadmap',
+        'Here is where we will track upcoming SignFlow milestones.',
+        'We will publish the public roadmap and progress updates here.'
+    )
+
+
+@app.route('/changelog')
+def changelog():
+    return render_placeholder(
+        'Changelog',
+        'Release notes and version history will appear here.',
+        'We will keep a detailed log of improvements, fixes, and new features.'
+    )
+
+
+@app.route('/accessibility')
+def accessibility():
+    return render_placeholder(
+        'Accessibility',
+        'Our accessibility commitments will live here.',
+        'We will document caption standards, inclusive design goals, and testing.'
+    )
+
+
+@app.route('/status')
+def status():
+    return render_placeholder(
+        'System Status',
+        'Service status updates will live here.',
+        'We will show uptime, incidents, and maintenance notices in this space.'
+    )
+
+
+@app.route('/newsletter')
+def newsletter():
+    return render_placeholder(
+        'Newsletter',
+        'Subscribe to SignFlow updates.',
+        'We will add a simple signup form and archive here.'
+    )
+
+
+@app.route('/privacy')
+def privacy():
+    return render_placeholder(
+        'Privacy Policy',
+        'Our privacy policy will live here.',
+        'We will detail data handling, telemetry, and user rights.'
+    )
+
+
+@app.route('/terms')
+def terms():
+    return render_placeholder(
+        'Terms of Service',
+        'Our terms of service will live here.',
+        'We will outline usage guidelines, licensing, and account terms.'
+    )
+
+
+@app.route('/press')
+def press():
+    return render_placeholder(
+        'Press Kit',
+        'SignFlow press assets will live here.',
+        'We will add brand guidelines, screenshots, and contact info.'
+    )
 
 
 @app.errorhandler(404)

@@ -53,12 +53,12 @@
                 </div>
 
                 <div class="social-login">
-                    <button class="btn btn-social" disabled>
+                    <a class="btn btn-social" href="{{ url_for('auth_github') }}">
                         <span>Sign in with GitHub</span>
-                    </button>
-                    <button class="btn btn-social" disabled>
+                    </a>
+                    <a class="btn btn-social" href="{{ url_for('auth_google') }}">
                         <span>Sign in with Google</span>
-                    </button>
+                    </a>
                 </div>
 
                 <div class="login-footer">

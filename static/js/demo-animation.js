@@ -7,6 +7,19 @@ function prefersReducedMotion() {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+const DEMO_MOTION = {
+    dragDuration: 2300,
+    processDelay: 950,
+    typingDelay: 600,
+    holdDuration: 3200,
+    typingInterval: 90,
+    startOffset: 250,
+    postDragDelay: 180,
+    loopPause: 700,
+    typingDefault: 65,
+    handInterval: 750
+};
+
 class DemoAnimation {
     constructor() {
         this.demoStage = document.querySelector('.demo-stage');
@@ -97,30 +110,30 @@ class DemoAnimation {
     }
 
     playAnimation() {
-        const dragDuration = 2000;
-        const processDelay = 800;
-        const typingDelay = 500;
-        const holdDuration = 3000;
-        const typingInterval = 80;
+        const dragDuration = DEMO_MOTION.dragDuration;
+        const processDelay = DEMO_MOTION.processDelay;
+        const typingDelay = DEMO_MOTION.typingDelay;
+        const holdDuration = DEMO_MOTION.holdDuration;
+        const typingInterval = DEMO_MOTION.typingInterval;
         const text = (this.captionText && this.captionText.dataset.fulltext) || '';
         const typingDuration = Math.max(text.length * typingInterval, 600);
 
         this.sequenceTimers = [];
-        this.schedule(() => this.drawSelection(dragDuration), 200);
-        this.schedule(() => this.showProcessing(), 200 + dragDuration + 150);
+        this.schedule(() => this.drawSelection(dragDuration), DEMO_MOTION.startOffset);
+        this.schedule(() => this.showProcessing(), DEMO_MOTION.startOffset + dragDuration + DEMO_MOTION.postDragDelay);
         this.schedule(
             () => this.typeCaption(false, typingInterval),
-            200 + dragDuration + processDelay + typingDelay
+            DEMO_MOTION.startOffset + dragDuration + processDelay + typingDelay
         );
         this.schedule(
             () => this.resetAnimation(),
-            200 + dragDuration + processDelay + typingDelay + typingDuration + holdDuration
+            DEMO_MOTION.startOffset + dragDuration + processDelay + typingDelay + typingDuration + holdDuration
         );
         this.schedule(() => {
             if (this.isAnimating) {
                 this.playAnimation();
             }
-        }, 200 + dragDuration + processDelay + typingDelay + typingDuration + holdDuration + 600);
+        }, DEMO_MOTION.startOffset + dragDuration + processDelay + typingDelay + typingDuration + holdDuration + DEMO_MOTION.loopPause);
     }
 
     schedule(action, delay) {
@@ -152,7 +165,7 @@ class DemoAnimation {
         }
     }
 
-    typeCaption(instant, interval = 55) {
+    typeCaption(instant, interval = DEMO_MOTION.typingDefault) {
         if (!this.captionText) return;
         const fullText = this.captionText.dataset.fulltext || '';
         this.captionText.textContent = '';
@@ -195,7 +208,7 @@ class DemoAnimation {
             this.leftHand.textContent = leftFrames[frameIndex % leftFrames.length];
             this.rightHand.textContent = rightFrames[frameIndex % rightFrames.length];
             frameIndex += 1;
-        }, 600);
+        }, DEMO_MOTION.handInterval);
     }
 
     stopSequence() {
