@@ -28,29 +28,38 @@ const safeStorage = {
 };
 
 const DOODLE_CONFIG = {
-    minCount: 8,
-    maxCount: 20,
-    areaPerDoodle: 140000,
-    minSize: 60,
-    maxSize: 140,
-    minOpacity: 0.04,
-    maxOpacity: 0.08,
+    minCount: 10,
+    maxCount: 24,
+    areaPerDoodle: 120000,
+    minSize: 58,
+    maxSize: 150,
+    minOpacityLight: 0.12,
+    maxOpacityLight: 0.18,
+    minOpacityDark: 0.1,
+    maxOpacityDark: 0.18,
     insetPadding: 6
 };
 
 const DOODLE_SVGS = (() => {
     const toDataUri = (svg) => `data:image/svg+xml,${encodeURIComponent(svg)}`;
-    const buildSet = (stroke) => ([
-        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M16 42 C 36 12, 60 72, 86 42 S 124 72, 124 96" stroke="${stroke}" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-        `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="18" stroke="${stroke}" stroke-opacity="0.55" stroke-width="2"/></svg>`,
-        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M20 100 L70 30 L120 100 Z" stroke="${stroke}" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-        `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none"><path d="M60 12 L66 46 L100 52 L66 58 L60 96 L54 58 L20 52 L54 46 Z" stroke="${stroke}" stroke-opacity="0.55" stroke-width="2" stroke-linejoin="round"/></svg>`,
-        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M20 70 C 20 40, 120 40, 120 70 C 120 100, 20 100, 20 70 Z" stroke="${stroke}" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+    const buildSetGradient = (stops) => ([
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M16 42 C 36 12, 60 72, 86 42 S 124 72, 124 96" stroke="url(#g)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><circle cx="60" cy="60" r="18" stroke="url(#g)" stroke-width="2"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M20 100 L70 30 L120 100 Z" stroke="url(#g)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M60 12 L66 46 L100 52 L66 58 L60 96 L54 58 L20 52 L54 46 Z" stroke="url(#g)" stroke-width="2" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M20 70 C 20 40, 120 40, 120 70 C 120 100, 20 100, 20 70 Z" stroke="url(#g)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+    ]);
+    const buildSetSolid = (stroke) => ([
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M16 42 C 36 12, 60 72, 86 42 S 124 72, 124 96" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="18" stroke="${stroke}" stroke-width="2"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M20 100 L70 30 L120 100 Z" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none"><path d="M60 12 L66 46 L100 52 L66 58 L60 96 L54 58 L20 52 L54 46 Z" stroke="${stroke}" stroke-width="2" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M20 70 C 20 40, 120 40, 120 70 C 120 100, 20 100, 20 70 Z" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
     ]);
 
     return {
-        light: buildSet('#000000').map(toDataUri),
-        dark: buildSet('#ffffff').map(toDataUri)
+        light: buildSetSolid('#6b7280').map(toDataUri),
+        dark: buildSetGradient('<stop offset="0%" stop-color="#22d3ee"/><stop offset="50%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/>').map(toDataUri)
     };
 })();
 
@@ -67,6 +76,14 @@ function isHomePage() {
 function getDoodleSet() {
     const theme = document.documentElement.getAttribute('data-theme') || 'light';
     return theme === 'dark' ? DOODLE_SVGS.dark : DOODLE_SVGS.light;
+}
+
+function getDoodleOpacityRange() {
+    const theme = document.documentElement.getAttribute('data-theme') || 'light';
+    if (theme === 'dark') {
+        return { min: DOODLE_CONFIG.minOpacityDark, max: DOODLE_CONFIG.maxOpacityDark };
+    }
+    return { min: DOODLE_CONFIG.minOpacityLight, max: DOODLE_CONFIG.maxOpacityLight };
 }
 
 function buildDoodlesForSection(section, doodles) {
@@ -89,6 +106,8 @@ function buildDoodlesForSection(section, doodles) {
         Math.max(DOODLE_CONFIG.minCount, estimated)
     );
 
+    const opacityRange = getDoodleOpacityRange();
+
     for (let i = 0; i < count; i += 1) {
         const doodle = document.createElement('span');
         doodle.className = 'doodle';
@@ -100,7 +119,7 @@ function buildDoodlesForSection(section, doodles) {
         doodle.style.height = `${size.toFixed(0)}px`;
         doodle.style.top = `${top.toFixed(2)}%`;
         doodle.style.left = `${left.toFixed(2)}%`;
-        doodle.style.opacity = (DOODLE_CONFIG.minOpacity + Math.random() * (DOODLE_CONFIG.maxOpacity - DOODLE_CONFIG.minOpacity)).toFixed(2);
+        doodle.style.opacity = (opacityRange.min + Math.random() * (opacityRange.max - opacityRange.min)).toFixed(2);
         doodle.style.transform = `rotate(${Math.round(Math.random() * 360)}deg)`;
         doodle.style.backgroundImage = `url("${doodles[Math.floor(Math.random() * doodles.length)]}")`;
 

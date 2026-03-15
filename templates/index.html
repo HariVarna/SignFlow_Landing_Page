@@ -237,13 +237,13 @@
             <div class="recommended-badge">Recommended</div>
             <h3>Windows</h3>
             <p class="download-description">SignFlow for Windows 10+</p>
-            <a href="{{ url_for('download_windows') }}" class="btn btn-primary">Download for Windows</a>
+            <a href="{{ url_for('download_windows') }}" class="btn btn-primary" data-tooltip="Grab the Windows installer">Download for Windows</a>
             <p class="version-info">Latest: v1.0.0</p>
         </div>
         <div class="download-card">
             <h3>Linux</h3>
             <p class="download-description">Experimental build for Linux</p>
-            <a href="{{ url_for('download_linux') }}" class="btn btn-secondary">Download for Linux</a>
+            <a href="{{ url_for('download_linux') }}" class="btn btn-secondary" data-tooltip="Get the Linux build">Download for Linux</a>
             <p class="version-info">Latest: v1.0.0-beta</p>
         </div>
         <div class="download-card">
@@ -255,7 +255,7 @@
         <div class="download-card">
             <h3>Android</h3>
             <p class="download-description">SignFlow mobile application</p>
-            <a href="{{ url_for('download_android') }}" class="btn btn-secondary">Download for Android</a>
+            <a href="{{ url_for('download_android') }}" class="btn btn-secondary" data-tooltip="Open the Android download">Download for Android</a>
             <p class="version-info">Latest: v1.0.0</p>
         </div>
     </div>
@@ -291,7 +291,7 @@
         </div>
 
         <div class="github-cta">
-            <a href="https://github.com/mano-dev-01/SignFlow-Core" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">View on GitHub</a>
+            <a href="https://github.com/mano-dev-01/SignFlow-Core" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" data-tooltip="View the SignFlow repo">View on GitHub</a>
         </div>
     </div>
 </section>
@@ -306,17 +306,17 @@
             <div class="donation-card">
                 <div class="donation-amount">$5</div>
                 <p class="donation-desc">Coffee & Development</p>
-                <a href="{{ url_for('donate', amount=5) }}" class="btn btn-secondary">Donate</a>
+                <a href="{{ url_for('donate', amount=5) }}" class="btn btn-secondary" data-tooltip="Quick support donation">Donate</a>
             </div>
             <div class="donation-card featured">
                 <div class="donation-amount">$25</div>
                 <p class="donation-desc">Monthly Supporter</p>
-                <a href="{{ url_for('donate', amount=25) }}" class="btn btn-primary">Donate</a>
+                <a href="{{ url_for('donate', amount=25) }}" class="btn btn-primary" data-tooltip="Monthly supporter tier">Donate</a>
             </div>
             <div class="donation-card">
                 <div class="donation-amount">$100</div>
                 <p class="donation-desc">Research & Innovation</p>
-                <a href="{{ url_for('donate', amount=100) }}" class="btn btn-secondary">Donate</a>
+                <a href="{{ url_for('donate', amount=100) }}" class="btn btn-secondary" data-tooltip="Research and innovation tier">Donate</a>
             </div>
         </div>
 

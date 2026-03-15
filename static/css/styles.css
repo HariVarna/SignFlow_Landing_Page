@@ -83,6 +83,7 @@ body {
     transition: background-color var(--transition-base), color var(--transition-base);
 }
 
+
 .skip-link {
     position: absolute;
     top: -40px;
@@ -150,6 +151,17 @@ body {
     font-size: var(--font-size-lg);
 }
 
+.logo-text {
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .logo-text {
+    background-image: var(--text-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
 .logo-svg {
     width: 32px;
     height: 32px;
@@ -183,6 +195,13 @@ body {
     color: var(--text-primary);
 }
 
+:root[data-theme="dark"] .nav-link:hover {
+    color: transparent;
+    background-image: var(--text-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
 .nav-link:focus-visible,
 .theme-toggle:focus-visible,
 .nav-toggle:focus-visible,
@@ -201,6 +220,15 @@ body {
     margin-left: var(--spacing-lg);
 }
 
+:root[data-theme="dark"] .nav-link.nav-donate {
+    border-color: transparent;
+    border-image: var(--accent-gradient) 1;
+    color: transparent !important;
+    background-image: var(--text-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
 /* Animated underline for active nav link */
 .nav-underline {
     position: absolute;
@@ -210,6 +238,11 @@ body {
     transition: left 480ms ease, width 480ms ease;
     border-radius: 1px;
     will-change: left, width;
+}
+
+:root[data-theme="dark"] .nav-underline {
+    background-image: var(--accent-gradient);
+    background-color: transparent;
 }
 
 .nav-link.nav-home {
@@ -400,6 +433,14 @@ body {
     font-weight: 700;
     margin-bottom: var(--spacing-md);
     letter-spacing: -0.02em;
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .hero-title {
+    background-image: var(--text-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .hero-tagline {
@@ -713,13 +754,13 @@ body {
 }
 
 :root[data-theme="dark"] .btn-primary {
-    background-color: var(--accent);
+    background-image: var(--accent-gradient);
     color: #000000;
 }
 
 :root[data-theme="dark"] .btn-primary:hover {
-    background-color: var(--accent-hover);
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+    background-image: var(--accent-gradient);
+    box-shadow: var(--glow-shadow);
     opacity: 1;
 }
 
@@ -736,13 +777,18 @@ body {
 }
 
 :root[data-theme="dark"] .btn-secondary {
-    color: var(--accent);
-    border-color: var(--accent);
+    color: transparent;
+    border-color: transparent;
+    border-image: var(--accent-gradient) 1;
+    background-image: var(--text-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
 }
 
 :root[data-theme="dark"] .btn-secondary:hover {
-    background-color: var(--accent);
+    background-image: var(--accent-gradient);
     color: #000000;
+    box-shadow: var(--glow-shadow);
 }
 
 .btn-disabled {
@@ -792,6 +838,24 @@ section h2 {
     font-size: var(--font-size-3xl);
     margin-bottom: var(--spacing-xl);
     text-align: center;
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] section h2 {
+    background-image: var(--text-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] h4 {
+    background-image: var(--text-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .doodle-layer {
@@ -842,11 +906,24 @@ section h2 {
     border-color: var(--accent);
 }
 
+:root[data-theme="dark"] .stat-card:hover {
+    border-color: transparent;
+    border-image: var(--accent-gradient) 1;
+    box-shadow: var(--glow-shadow);
+}
+
 .stat-number {
     font-size: var(--font-size-3xl);
     font-weight: 700;
     color: var(--accent);
     margin-bottom: var(--spacing-sm);
+}
+
+:root[data-theme="dark"] .stat-number {
+    background-image: var(--text-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .stat-label {
@@ -900,7 +977,9 @@ section h2 {
 }
 
 :root[data-theme="dark"] .pipeline-content:hover {
-    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.1);
+    border-color: transparent;
+    border-image: var(--accent-gradient) 1;
+    box-shadow: var(--glow-shadow);
 }
 
 .stage-number {
@@ -977,6 +1056,18 @@ section h2 {
     transform: translateY(-3px);
 }
 
+:root[data-theme="dark"] .stage-number {
+    background-image: var(--text-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+:root[data-theme="dark"] .platform-card:hover {
+    border-color: transparent;
+    border-image: var(--accent-gradient) 1;
+}
+
 .platform-icon {
     font-size: 2.5rem;
     margin-bottom: var(--spacing-sm);
@@ -1020,9 +1111,21 @@ section h2 {
     box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
 }
 
+:root[data-theme="dark"] .download-card:hover {
+    border-color: transparent;
+    border-image: var(--accent-gradient) 1;
+    box-shadow: var(--glow-shadow);
+}
+
 .download-card.recommended {
     border-color: var(--accent);
     box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15);
+}
+
+:root[data-theme="dark"] .download-card.recommended {
+    border-color: transparent;
+    border-image: var(--accent-gradient) 1;
+    box-shadow: var(--glow-shadow);
 }
 
 .recommended-badge {
@@ -1035,6 +1138,10 @@ section h2 {
     border-radius: var(--radius-md);
     font-size: var(--font-size-xs);
     font-weight: 600;
+}
+
+:root[data-theme="dark"] .recommended-badge {
+    background-image: var(--accent-gradient);
 }
 
 .download-card h3 {
@@ -1083,6 +1190,11 @@ section h2 {
 .tech-item:hover {
     border-color: var(--accent);
     transform: translateY(-3px);
+}
+
+:root[data-theme="dark"] .tech-item:hover {
+    border-color: transparent;
+    border-image: var(--accent-gradient) 1;
 }
 
 .tech-icon {
@@ -1136,10 +1248,21 @@ section h2 {
     transform: translateY(-3px);
 }
 
+:root[data-theme="dark"] .donation-card:hover {
+    border-color: transparent;
+    border-image: var(--accent-gradient) 1;
+}
+
 .donation-card.featured {
     border-color: var(--accent);
     box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
     transform: scale(1.05);
+}
+
+:root[data-theme="dark"] .donation-card.featured {
+    border-color: transparent;
+    border-image: var(--accent-gradient) 1;
+    box-shadow: var(--glow-shadow);
 }
 
 .donation-card.featured:hover {
@@ -1151,6 +1274,13 @@ section h2 {
     font-weight: 700;
     color: var(--accent);
     margin-bottom: var(--spacing-sm);
+}
+
+:root[data-theme="dark"] .donation-amount {
+    background-image: var(--text-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .donation-desc {
@@ -1241,6 +1371,11 @@ section h2 {
     border-left: 4px solid var(--accent);
 }
 
+:root[data-theme="dark"] .about-section {
+    border-left: 4px solid transparent;
+    border-image: var(--accent-gradient) 1;
+}
+
 .about-section h2 {
     font-size: var(--font-size-xl);
     margin-bottom: var(--spacing-md);
@@ -1311,6 +1446,12 @@ section h2 {
     box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
 }
 
+:root[data-theme="dark"] .download-option:hover {
+    border-color: transparent;
+    border-image: var(--accent-gradient) 1;
+    box-shadow: var(--glow-shadow);
+}
+
 .option-header {
     display: flex;
     justify-content: space-between;
@@ -1335,6 +1476,10 @@ section h2 {
 .badge.recommended {
     background-color: var(--accent);
     color: white;
+}
+
+:root[data-theme="dark"] .badge.recommended {
+    background-image: var(--accent-gradient);
 }
 
 .badge.experimental {
@@ -1523,6 +1668,14 @@ code {
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+:root[data-theme="dark"] .form-group input:focus,
+:root[data-theme="dark"] .form-group select:focus,
+:root[data-theme="dark"] .form-group textarea:focus {
+    border-color: transparent;
+    border-image: var(--accent-gradient) 1;
+    box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+}
+
 .contact-info-container {
     display: flex;
     flex-direction: column;
@@ -1534,6 +1687,11 @@ code {
     padding: var(--spacing-lg);
     border-radius: var(--radius-lg);
     border-left: 4px solid var(--accent);
+}
+
+:root[data-theme="dark"] .contact-info-item {
+    border-left: 4px solid transparent;
+    border-image: var(--accent-gradient) 1;
 }
 
 .contact-info-item h3 {
@@ -1576,6 +1734,11 @@ code {
     padding: var(--spacing-lg);
     border-radius: var(--radius-lg);
     border-left: 4px solid var(--accent);
+}
+
+:root[data-theme="dark"] .faq-item {
+    border-left: 4px solid transparent;
+    border-image: var(--accent-gradient) 1;
 }
 
 .faq-item h4 {
@@ -1813,6 +1976,17 @@ code {
 .footer-section a {
     color: var(--accent);
     text-decoration: none;
+}
+
+:root[data-theme="dark"] .footer-section a,
+:root[data-theme="dark"] .footer-legal a,
+:root[data-theme="dark"] .contact-info-item a,
+:root[data-theme="dark"] .forgot-password,
+:root[data-theme="dark"] .login-footer a {
+    color: transparent;
+    background-image: var(--text-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
 }
 
 .footer-section a:hover {
