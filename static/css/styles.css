@@ -50,15 +50,28 @@
 
 /* Dark Theme - Consistent Neon */
 :root[data-theme="dark"] {
-    --bg-primary: #0a0a0a;
-    --bg-secondary: #121212;
-    --bg-tertiary: #1e1e1e;
-    --text-primary: #ffffff;
-    --text-secondary: #e0e0e0;
-    --text-tertiary: #a0a0a0;
-    --border-color: #2a2a2a;
-    --accent: #00a8cc;
-    --accent-hover: #0088aa;
+    --bg-primary: #070911;
+    --bg-secondary: #0d1224;
+    --bg-tertiary: #141a33;
+    --text-primary: #f5f7ff;
+    --text-secondary: #c9d2f0;
+    --text-tertiary: #99a3c7;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --accent: #22d3ee;
+    --accent-hover: #67e8f9;
+    --accent-gradient: linear-gradient(120deg, #22d3ee 0%, #60a5fa 40%, #a855f7 100%);
+    --text-gradient: linear-gradient(120deg, #e0f2fe 0%, #7dd3fc 35%, #a5b4fc 65%, #f0abfc 100%);
+    --text-gradient-soft: linear-gradient(120deg, #c7f9ff 0%, #b3c6ff 50%, #f6c4ff 100%);
+    --glow-shadow: 0 0 18px rgba(34, 211, 238, 0.35), 0 0 36px rgba(96, 165, 250, 0.25), 0 0 54px rgba(168, 85, 247, 0.2);
+    --neon-bg-hero: radial-gradient(900px 380px at 15% -10%, rgba(34, 211, 238, 0.28), transparent 60%),
+        radial-gradient(800px 360px at 85% 5%, rgba(168, 85, 247, 0.25), transparent 60%);
+    --neon-bg-soft: radial-gradient(700px 320px at 15% 0%, rgba(34, 211, 238, 0.2), transparent 60%),
+        radial-gradient(700px 320px at 85% 10%, rgba(99, 102, 241, 0.18), transparent 60%);
+    --neon-bg-mid: radial-gradient(800px 320px at 20% 0%, rgba(59, 130, 246, 0.22), transparent 60%),
+        radial-gradient(700px 300px at 80% 15%, rgba(168, 85, 247, 0.22), transparent 60%);
+    --neon-bg-footer: radial-gradient(900px 380px at 20% 0%, rgba(34, 211, 238, 0.22), transparent 60%),
+        radial-gradient(700px 320px at 85% 0%, rgba(168, 85, 247, 0.22), transparent 60%);
+    --neon-surface: linear-gradient(145deg, rgba(34, 211, 238, 0.12) 0%, rgba(99, 102, 241, 0.12) 45%, rgba(168, 85, 247, 0.14) 100%);
 }
 
 /* ============================================
@@ -853,6 +866,68 @@ section h2 {
 :root[data-theme="dark"] h3,
 :root[data-theme="dark"] h4 {
     background-image: var(--text-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+:root[data-theme="dark"] .hero {
+    background-color: var(--bg-primary);
+    background-image: var(--neon-bg-hero);
+}
+
+:root[data-theme="dark"] .demo-section {
+    background-color: var(--bg-secondary);
+    background-image: var(--neon-bg-soft);
+}
+
+:root[data-theme="dark"] .why-matters {
+    background-color: var(--bg-primary);
+    background-image: var(--neon-bg-soft);
+}
+
+:root[data-theme="dark"] .how-it-works {
+    background-color: var(--bg-secondary);
+    background-image: var(--neon-bg-mid);
+}
+
+:root[data-theme="dark"] .platform-support {
+    background-color: var(--bg-primary);
+    background-image: var(--neon-bg-soft);
+}
+
+:root[data-theme="dark"] .download-section {
+    background-color: var(--bg-secondary);
+    background-image: var(--neon-bg-soft);
+}
+
+:root[data-theme="dark"] .open-source {
+    background-color: var(--bg-primary);
+    background-image: var(--neon-bg-mid);
+}
+
+:root[data-theme="dark"] .donation-section {
+    background-color: var(--bg-secondary);
+    background-image: var(--neon-bg-mid);
+}
+
+:root[data-theme="dark"] .login-section {
+    background-color: var(--bg-primary);
+    background-image: var(--neon-bg-soft);
+}
+
+:root[data-theme="dark"] .page-hero {
+    background-color: var(--bg-secondary);
+    background-image: var(--neon-bg-hero);
+}
+
+:root[data-theme="dark"] .footer {
+    background-color: var(--bg-tertiary);
+    background-image: var(--neon-bg-footer);
+}
+
+:root[data-theme="dark"] .hero-tagline {
+    background-image: var(--text-gradient-soft);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
