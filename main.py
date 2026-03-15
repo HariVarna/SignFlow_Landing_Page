@@ -250,7 +250,7 @@ def newsletter():
 
 
 @app.route('/privacy')
-def privacy():
+def privacy():  
     return render_placeholder(
         'Privacy Policy',
         'Our privacy policy will live here.',

@@ -198,17 +198,8 @@ class DemoAnimation {
 
     startHandSequence() {
         if (!this.leftHand || !this.rightHand) return;
-
-        const leftFrames = ['🤟', '🖐️', '🤟', '👌'];
-        const rightFrames = ['✋', '🤟', '✋', '👌'];
-        let frameIndex = 0;
-
         clearInterval(this.handTimer);
-        this.handTimer = setInterval(() => {
-            this.leftHand.textContent = leftFrames[frameIndex % leftFrames.length];
-            this.rightHand.textContent = rightFrames[frameIndex % rightFrames.length];
-            frameIndex += 1;
-        }, DEMO_MOTION.handInterval);
+        this.handTimer = null;
     }
 
     stopSequence() {
@@ -219,8 +210,6 @@ class DemoAnimation {
         clearInterval(this.handTimer);
         this.typingTimer = null;
         this.handTimer = null;
-        if (this.leftHand) this.leftHand.textContent = '🤟';
-        if (this.rightHand) this.rightHand.textContent = '✋';
         this.resetAnimation();
     }
 }

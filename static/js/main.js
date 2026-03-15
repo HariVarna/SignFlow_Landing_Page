@@ -69,6 +69,16 @@ function prefersReducedMotion() {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+function initLucideIcons() {
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons({
+            attrs: {
+                'stroke-width': 1.75
+            }
+        });
+    }
+}
+
 function isHomePage() {
     return Boolean(document.querySelector('.hero'));
 }
@@ -158,6 +168,9 @@ function initApp() {
 
     // Initialize random background doodles
     initDoodleLayers();
+
+    // Initialize SVG icons
+    initLucideIcons();
 
     // Initialize intersection observer for animations
     initIntersectionObserver();

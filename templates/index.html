@@ -7,9 +7,15 @@
 <!-- Hero Section -->
 <section class="hero" id="home">
     <div class="hero-background">
-        <div class="animated-hand-doodle doodle-1"></div>
-        <div class="animated-hand-doodle doodle-2"></div>
-        <div class="animated-hand-doodle doodle-3"></div>
+        <div class="animated-hand-doodle doodle-1" aria-hidden="true">
+            <span class="icon icon-hero" data-lucide="hand">🤟</span>
+        </div>
+        <div class="animated-hand-doodle doodle-2" aria-hidden="true">
+            <span class="icon icon-hero" data-lucide="hand">🤟</span>
+        </div>
+        <div class="animated-hand-doodle doodle-3" aria-hidden="true">
+            <span class="icon icon-hero" data-lucide="hand">🤟</span>
+        </div>
     </div>
     
     <div class="hero-content">
@@ -36,8 +42,8 @@
             <div class="demo-device" role="img" aria-label="SignFlow demo animation">
                 <div class="demo-screen">
                     <div class="demo-hands" aria-hidden="true">
-                        <span class="hand-emoji hand-left">🤟</span>
-                        <span class="hand-emoji hand-right">✋</span>
+                        <span class="hand-icon hand-left icon icon-demo-hand" data-lucide="hand">🤟</span>
+                        <span class="hand-icon hand-right icon icon-demo-hand" data-lucide="hand">✋</span>
                     </div>
 
                     <div class="demo-overlay" aria-hidden="true">
@@ -104,7 +110,9 @@
         <div class="pipeline-item">
             <div class="pipeline-content">
                 <div class="stage-number">01</div>
-                <div class="stage-icon">📹</div>
+                <div class="stage-icon">
+                    <span class="icon icon-stage" data-lucide="video" aria-hidden="true">📹</span>
+                </div>
                 <h3>Video Capture</h3>
                 <p>Real-time video feed from your screen or camera</p>
             </div>
@@ -126,7 +134,9 @@
         <div class="pipeline-item">
             <div class="pipeline-content">
                 <div class="stage-number">02</div>
-                <div class="stage-icon">👐</div>
+                <div class="stage-icon">
+                    <span class="icon icon-stage" data-lucide="hand" aria-hidden="true">👐</span>
+                </div>
                 <h3>Hand Detection</h3>
                 <p>MediaPipe extracts hand landmarks and pose</p>
             </div>
@@ -148,7 +158,9 @@
         <div class="pipeline-item">
             <div class="pipeline-content">
                 <div class="stage-number">03</div>
-                <div class="stage-icon">🤖</div>
+                <div class="stage-icon">
+                    <span class="icon icon-stage" data-lucide="cpu" aria-hidden="true">🤖</span>
+                </div>
                 <h3>ML Inference</h3>
                 <p>Neural network predicts sign language tokens</p>
             </div>
@@ -170,7 +182,9 @@
         <div class="pipeline-item">
             <div class="pipeline-content">
                 <div class="stage-number">04</div>
-                <div class="stage-icon">&#129504;</div>
+                <div class="stage-icon">
+                    <span class="icon icon-stage" data-lucide="align-left" aria-hidden="true">🧠</span>
+                </div>
                 <h3>LLM Smoothing</h3>
                 <p>LLM refines ASL grammar into natural English phrasing</p>
             </div>
@@ -192,7 +206,9 @@
         <div class="pipeline-item">
             <div class="pipeline-content">
                 <div class="stage-number">05</div>
-                <div class="stage-icon">💬</div>
+                <div class="stage-icon">
+                    <span class="icon icon-stage" data-lucide="message-square" aria-hidden="true">💬</span>
+                </div>
                 <h3>Live Captions</h3>
                 <p>English text appears instantly in overlay</p>
             </div>
@@ -205,22 +221,30 @@
     <h2>Platform Support</h2>
     <div class="platforms-grid">
         <div class="platform-card">
-            <div class="platform-icon">🪟</div>
+            <div class="platform-icon">
+                <span class="icon icon-platform" data-lucide="monitor" aria-hidden="true">🪟</span>
+            </div>
             <h3>Windows</h3>
             <p>Full support</p>
         </div>
         <div class="platform-card">
-            <div class="platform-icon">🐧</div>
+            <div class="platform-icon">
+                <span class="icon icon-platform" data-lucide="terminal" aria-hidden="true">🐧</span>
+            </div>
             <h3>Linux</h3>
             <p>Experimental</p>
         </div>
         <div class="platform-card">
-            <div class="platform-icon">🍎</div>
+            <div class="platform-icon">
+                <span class="icon icon-platform" data-lucide="laptop" aria-hidden="true">🍎</span>
+            </div>
             <h3>macOS</h3>
             <p>Coming soon</p>
         </div>
         <div class="platform-card">
-            <div class="platform-icon">📱</div>
+            <div class="platform-icon">
+                <span class="icon icon-platform" data-lucide="smartphone" aria-hidden="true">📱</span>
+            </div>
             <h3>Android</h3>
             <p>Mobile version</p>
         </div>
@@ -269,22 +293,30 @@
         
         <div class="tech-features">
             <div class="tech-item">
-                <div class="tech-icon">👁️</div>
+                <div class="tech-icon">
+                    <span class="icon icon-tech" data-lucide="eye" aria-hidden="true">👁️</span>
+                </div>
                 <h3>Computer Vision</h3>
                 <p>Advanced visual processing for hand and gesture detection</p>
             </div>
             <div class="tech-item">
-                <div class="tech-icon">🧠</div>
+                <div class="tech-icon">
+                    <span class="icon icon-tech" data-lucide="activity" aria-hidden="true">🧠</span>
+                </div>
                 <h3>Machine Learning</h3>
                 <p>Trained models for sign language recognition and prediction</p>
             </div>
             <div class="tech-item">
-                <div class="tech-icon">🙌</div>
+                <div class="tech-icon">
+                    <span class="icon icon-tech" data-lucide="hand" aria-hidden="true">🙌</span>
+                </div>
                 <h3>MediaPipe</h3>
                 <p>Robust hand tracking library from Google Research</p>
             </div>
             <div class="tech-item">
-                <div class="tech-icon">🔓</div>
+                <div class="tech-icon">
+                    <span class="icon icon-tech" data-lucide="git-branch" aria-hidden="true">🔓</span>
+                </div>
                 <h3>Open Development</h3>
                 <p>Contribute on GitHub and help shape the future of accessibility</p>
             </div>

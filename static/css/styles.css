@@ -96,6 +96,55 @@ body {
     transition: background-color var(--transition-base), color var(--transition-base);
 }
 
+.icon {
+    width: 1em;
+    height: 1em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.icon-logo {
+    width: 32px;
+    height: 32px;
+    font-size: 32px;
+    color: var(--accent);
+    animation: logo-hover 0.8s ease-out;
+}
+
+.icon-hero {
+    width: 120px;
+    height: 120px;
+    font-size: 120px;
+}
+
+.icon-demo-hand {
+    width: 72px;
+    height: 72px;
+    font-size: 72px;
+}
+
+.icon-stage {
+    width: 2.4rem;
+    height: 2.4rem;
+    font-size: 2.4rem;
+}
+
+.icon-platform {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 2.5rem;
+}
+
+.icon-tech {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 2.5rem;
+}
+
 
 .skip-link {
     position: absolute;
@@ -182,11 +231,6 @@ body {
     animation: logo-hover 0.8s ease-out;
 }
 
-.logo-emoji {
-    font-size: 32px;
-    opacity: 0.95;
-    line-height: 1;
-}
 
 .navbar-menu {
     display: flex;
@@ -215,6 +259,12 @@ body {
     background-clip: text;
 }
 
+:root[data-theme="dark"] .nav-link.nav-donate:hover {
+    color: var(--text-primary) !important;
+    background-image: none;
+    background-clip: border-box;
+}
+
 .nav-link:focus-visible,
 .theme-toggle:focus-visible,
 .nav-toggle:focus-visible,
@@ -234,12 +284,10 @@ body {
 }
 
 :root[data-theme="dark"] .nav-link.nav-donate {
-    border-color: transparent;
-    border-image: var(--accent-gradient) 1;
-    color: transparent !important;
-    background-image: var(--text-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
+    border-color: var(--accent);
+    border-image: none;
+    color: var(--text-primary) !important;
+    background-image: none;
 }
 
 /* Animated underline for active nav link */
@@ -380,9 +428,14 @@ body {
 
 .animated-hand-doodle {
     position: absolute;
-    font-size: 120px;
+    width: 120px;
+    height: 120px;
     opacity: 0.08;
     pointer-events: none;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
 }
 
@@ -393,10 +446,6 @@ body {
     transform-origin: center;
 }
 
-.animated-hand-doodle.doodle-1::before {
-    content: "🤟";
-}
-
 .animated-hand-doodle.doodle-2 {
     top: 50%;
     right: 10%;
@@ -404,19 +453,11 @@ body {
     transform-origin: center;
 }
 
-.animated-hand-doodle.doodle-2::before {
-    content: "🤟";
-}
-
 .animated-hand-doodle.doodle-3 {
     bottom: 10%;
     left: 50%;
     animation: float 10s ease-in-out infinite 2s;
     transform-origin: center;
-}
-
-.animated-hand-doodle.doodle-3::before {
-    content: "🤟";
 }
 
 /* Section-specific decorative doodles with flow animation */
@@ -542,16 +583,24 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 80px;
-    font-size: 72px;
+    gap: 72px;
     opacity: 0.92;
+    color: var(--text-primary);
     transform: translateY(0);
     animation: hands-bob 4.6s ease-in-out infinite;
 }
 
-.hand-emoji {
-    display: inline-block;
+.hand-icon {
+    display: inline-flex;
     filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.12));
+}
+
+.hand-left {
+    transform: rotate(-8deg);
+}
+
+.hand-right {
+    transform: rotate(8deg) scaleX(-1);
 }
 
 .demo-overlay {
@@ -768,13 +817,14 @@ body {
 
 :root[data-theme="dark"] .btn-primary {
     background-image: var(--accent-gradient);
-    color: #000000;
+    color: #05070f;
 }
 
 :root[data-theme="dark"] .btn-primary:hover {
     background-image: var(--accent-gradient);
     box-shadow: var(--glow-shadow);
     opacity: 1;
+    color: #05070f;
 }
 
 .btn-secondary {
@@ -790,17 +840,16 @@ body {
 }
 
 :root[data-theme="dark"] .btn-secondary {
-    color: transparent;
-    border-color: transparent;
-    border-image: var(--accent-gradient) 1;
-    background-image: var(--text-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
+    color: var(--text-primary);
+    border-color: var(--accent);
+    border-image: none;
+    background-image: none;
 }
 
 :root[data-theme="dark"] .btn-secondary:hover {
-    background-image: var(--accent-gradient);
-    color: #000000;
+    background-color: rgba(34, 211, 238, 0.12);
+    color: var(--text-primary);
+    border-color: var(--accent-hover);
     box-shadow: var(--glow-shadow);
 }
 
@@ -1067,9 +1116,10 @@ section h2 {
 }
 
 .stage-icon {
-    font-size: 2.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: var(--spacing-sm) 0;
-    display: block;
 }
 
 .pipeline-content h3 {
@@ -1144,7 +1194,9 @@ section h2 {
 }
 
 .platform-icon {
-    font-size: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: var(--spacing-sm);
 }
 
@@ -1273,7 +1325,9 @@ section h2 {
 }
 
 .tech-icon {
-    font-size: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: var(--spacing-md);
 }
 

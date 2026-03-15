@@ -16,7 +16,7 @@
         <div class="navbar-container">
             <!-- Logo and Project Name -->
             <a class="navbar-logo" href="{{ url_for('index') }}" aria-label="SignFlow home">
-                <div class="logo-emoji" aria-hidden="true">🤟</div>
+                <span class="icon icon-logo" data-lucide="hand" aria-hidden="true">🤟</span>
                 <span class="logo-text">SignFlow</span>
             </a>
 
@@ -115,6 +115,7 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/lucide.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
     <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
