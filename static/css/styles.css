@@ -1961,17 +1961,17 @@ code {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-xl) var(--spacing-lg);
+    padding: var(--spacing-lg) var(--spacing-lg);
 }
 
 .login-container {
-    max-width: 1000px;
+    max-width: 860px;
     width: 100%;
 }
 
 .login-card {
     background-color: var(--bg-secondary);
-    padding: var(--spacing-2xl);
+    padding: var(--spacing-xl);
     border-radius: var(--radius-xl);
     border: 1px solid var(--border-color);
 }
@@ -1979,14 +1979,14 @@ code {
 .login-card.login-panel {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: var(--spacing-2xl);
+    gap: var(--spacing-xl);
     align-items: center;
 }
 
 .login-panel-left {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
 }
 
 .login-panel-right {
@@ -1999,8 +1999,8 @@ code {
 }
 
 .login-header h1 {
-    font-size: var(--font-size-2xl);
-    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-xs);
 }
 
 .login-header p {
@@ -2009,18 +2009,18 @@ code {
 
 .login-intro {
     color: var(--text-secondary);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     margin: 0;
 }
 
 .login-highlights {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-xs);
 }
 
 .login-chip {
-    padding: 6px 12px;
+    padding: 4px 10px;
     border-radius: 999px;
     border: 1px solid var(--border-color);
     background-color: var(--bg-primary);
@@ -2029,14 +2029,14 @@ code {
 }
 
 .login-form {
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-lg);
 }
 
 .form-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: var(--spacing-md) 0;
+    margin: var(--spacing-sm) 0;
     font-size: var(--font-size-sm);
 }
 
@@ -2064,7 +2064,7 @@ code {
 .login-divider {
     position: relative;
     text-align: center;
-    margin: var(--spacing-lg) 0;
+    margin: var(--spacing-md) 0;
     color: var(--text-tertiary);
 }
 
@@ -2087,14 +2087,14 @@ code {
 .social-login {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
 }
 
 .login-footer {
     text-align: left;
-    padding: var(--spacing-md) 0 0;
+    padding: var(--spacing-sm) 0 0;
     border-top: 1px solid var(--border-color);
-    margin-top: var(--spacing-lg);
+    margin-top: var(--spacing-md);
 }
 
 .login-footer p {
