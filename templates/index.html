@@ -14,7 +14,7 @@
         <p class="hero-subtitle" data-animation="fade-in-up">Real-time sign language prediction</p>
         
         <div class="hero-buttons" data-animation="fade-in-up">
-            <a href="#download" class="btn btn-primary">Download SignFlow</a>
+            <a href="{{ url_for('static', filename='assets/signflow-ily.svg') }}" class="btn btn-primary" download="SignFlow-ILY.svg">Download SignFlow</a>
             <a href="#how-works" class="btn btn-secondary">See How It Works</a>
         </div>
     </div>
@@ -236,7 +236,7 @@
                 <span class="icon icon-platform" data-lucide="smartphone" aria-hidden="true">📱</span>
             </div>
             <h3>Android</h3>
-            <p>Mobile version</p>
+            <p>Coming soon</p>
         </div>
     </div>
 </section>
@@ -269,8 +269,8 @@
         <div class="download-card">
             <h3>Android</h3>
             <p class="download-description">SignFlow mobile application</p>
-            <a href="{{ url_for('download_android') }}" class="btn btn-secondary">Download for Android</a>
-            <p class="version-info">Latest: v1.0.0</p>
+            <a href="{{ url_for('download_android') }}" class="btn btn-disabled" aria-disabled="true">Coming Soon</a>
+            <p class="version-info">Coming 2026</p>
         </div>
     </div>
 </section>

@@ -28,20 +28,24 @@ const safeStorage = {
 };
 
 const DOODLE_CONFIG = {
-    minCount: 10,
-    maxCount: 24,
-    areaPerDoodle: 120000,
+    minCount: 6,
+    maxCount: 16,
+    areaPerDoodle: 160000,
     minSize: 58,
     maxSize: 150,
     minOpacityLight: 0.12,
     maxOpacityLight: 0.18,
-    minOpacityDark: 0.1,
-    maxOpacityDark: 0.18,
+    minOpacityDark: 0.18,
+    maxOpacityDark: 0.28,
     insetPadding: 6,
     edgePaddingPercent: 10,
     maxPlacementAttempts: 40,
     minSeparationFactor: 1.08
 };
+
+const DOODLE_ANIMATION_ENABLED = true;
+const DOODLE_REBUILD_ON_RESIZE = false;
+const DOODLE_REBUILD_ON_THEME_CHANGE = false;
 
 const DOODLE_SVGS = (() => {
     const toDataUri = (svg) => `data:image/svg+xml,${encodeURIComponent(svg)}`;
@@ -171,14 +175,27 @@ function buildDoodlesForSection(section, doodles) {
         }
 
         const doodle = document.createElement('span');
-        doodle.className = 'doodle';
+        doodle.className = 'doodle doodle--flow';
+        const direction = Math.random() < 0.5 ? 1 : -1;
+        const driftDistance = 10 + Math.random() * 14;
+        const tiltFactor = 0.12 + Math.random() * 0.2;
+        const verticalSign = Math.random() < 0.5 ? -1 : 1;
+        const driftX = direction * driftDistance;
+        const driftY = verticalSign * driftDistance * tiltFactor;
         doodle.style.width = `${placedDoodle.size.toFixed(0)}px`;
         doodle.style.height = `${placedDoodle.size.toFixed(0)}px`;
         doodle.style.left = `${placedDoodle.leftPx.toFixed(1)}px`;
         doodle.style.top = `${placedDoodle.topPx.toFixed(1)}px`;
-        doodle.style.opacity = (opacityRange.min + Math.random() * (opacityRange.max - opacityRange.min)).toFixed(2);
-        doodle.style.transform = `rotate(${Math.round(Math.random() * 360)}deg)`;
+        doodle.style.setProperty('--doodle-opacity', (opacityRange.min + Math.random() * (opacityRange.max - opacityRange.min)).toFixed(2));
         doodle.style.backgroundImage = `url("${doodles[Math.floor(Math.random() * doodles.length)]}")`;
+        doodle.style.setProperty('--doodle-rotate', `${Math.round(Math.random() * 360)}deg`);
+        doodle.style.setProperty('--doodle-duration', `${16 + Math.random() * 12}s`);
+        doodle.style.setProperty('--doodle-delay', `${(Math.random() * 6).toFixed(2)}s`);
+        doodle.style.setProperty('--doodle-dx', `${driftX.toFixed(1)}px`);
+        doodle.style.setProperty('--doodle-dy', `${driftY.toFixed(1)}px`);
+        if (!DOODLE_ANIMATION_ENABLED || prefersReducedMotion()) {
+            doodle.classList.add('doodle--static');
+        }
 
         placed.push(placedDoodle);
         layer.appendChild(doodle);
@@ -240,14 +257,18 @@ function initApp() {
         }, 150);
     }
 
-    window.addEventListener('themechange', () => {
-        initDoodleLayers();
-    });
+    if (DOODLE_REBUILD_ON_THEME_CHANGE) {
+        window.addEventListener('themechange', () => {
+            initDoodleLayers();
+        });
+    }
 
-    window.addEventListener('resize', () => {
-        clearTimeout(doodleResizeTimer);
-        doodleResizeTimer = setTimeout(initDoodleLayers, 200);
-    }, { passive: true });
+    if (DOODLE_REBUILD_ON_RESIZE) {
+        window.addEventListener('resize', () => {
+            clearTimeout(doodleResizeTimer);
+            doodleResizeTimer = setTimeout(initDoodleLayers, 200);
+        }, { passive: true });
+    }
 }
 
 // Hash-based navigation system
