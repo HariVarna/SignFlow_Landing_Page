@@ -37,7 +37,10 @@ const DOODLE_CONFIG = {
     maxOpacityLight: 0.18,
     minOpacityDark: 0.1,
     maxOpacityDark: 0.18,
-    insetPadding: 6
+    insetPadding: 6,
+    edgePaddingPercent: 10,
+    maxPlacementAttempts: 40,
+    minSeparationFactor: 1.08
 };
 
 const DOODLE_SVGS = (() => {
@@ -47,14 +50,26 @@ const DOODLE_SVGS = (() => {
         `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><circle cx="60" cy="60" r="18" stroke="url(#g)" stroke-width="2"/></svg>`,
         `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M20 100 L70 30 L120 100 Z" stroke="url(#g)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
         `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M60 12 L66 46 L100 52 L66 58 L60 96 L54 58 L20 52 L54 46 Z" stroke="url(#g)" stroke-width="2" stroke-linejoin="round"/></svg>`,
-        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M20 70 C 20 40, 120 40, 120 70 C 120 100, 20 100, 20 70 Z" stroke="url(#g)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M20 70 C 20 40, 120 40, 120 70 C 120 100, 20 100, 20 70 Z" stroke="url(#g)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M28 44 L52 20 L88 20 L112 44 L112 96 L88 120 L52 120 L28 96 Z" stroke="url(#g)" stroke-width="2" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M30 40 C 60 20, 90 20, 110 40 C 90 60, 60 60, 30 40 Z" stroke="url(#g)" stroke-width="2" stroke-linecap="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M20 30 L120 30 L120 40 L20 40 Z M20 65 L120 65 L120 75 L20 75 Z M20 100 L120 100 L120 110 L20 110 Z" stroke="url(#g)" stroke-width="2"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M70 16 L90 46 L124 52 L98 76 L106 112 L70 94 L34 112 L42 76 L16 52 L50 46 Z" stroke="url(#g)" stroke-width="2" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M20 90 C 40 60, 60 120, 80 90 C 100 60, 120 120, 120 90" stroke="url(#g)" stroke-width="2" stroke-linecap="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><rect x="28" y="28" width="84" height="84" rx="18" stroke="url(#g)" stroke-width="2"/></svg>`
     ]);
     const buildSetSolid = (stroke) => ([
         `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M16 42 C 36 12, 60 72, 86 42 S 124 72, 124 96" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
         `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="18" stroke="${stroke}" stroke-width="2"/></svg>`,
         `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M20 100 L70 30 L120 100 Z" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
         `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none"><path d="M60 12 L66 46 L100 52 L66 58 L60 96 L54 58 L20 52 L54 46 Z" stroke="${stroke}" stroke-width="2" stroke-linejoin="round"/></svg>`,
-        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M20 70 C 20 40, 120 40, 120 70 C 120 100, 20 100, 20 70 Z" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M20 70 C 20 40, 120 40, 120 70 C 120 100, 20 100, 20 70 Z" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M28 44 L52 20 L88 20 L112 44 L112 96 L88 120 L52 120 L28 96 Z" stroke="${stroke}" stroke-width="2" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M30 40 C 60 20, 90 20, 110 40 C 90 60, 60 60, 30 40 Z" stroke="${stroke}" stroke-width="2" stroke-linecap="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M20 30 L120 30 L120 40 L20 40 Z M20 65 L120 65 L120 75 L20 75 Z M20 100 L120 100 L120 110 L20 110 Z" stroke="${stroke}" stroke-width="2"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M70 16 L90 46 L124 52 L98 76 L106 112 L70 94 L34 112 L42 76 L16 52 L50 46 Z" stroke="${stroke}" stroke-width="2" stroke-linejoin="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><path d="M20 90 C 40 60, 60 120, 80 90 C 100 60, 120 120, 120 90" stroke="${stroke}" stroke-width="2" stroke-linecap="round"/></svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140" fill="none"><rect x="28" y="28" width="84" height="84" rx="18" stroke="${stroke}" stroke-width="2"/></svg>`
     ]);
 
     return {
@@ -109,7 +124,9 @@ function buildDoodlesForSection(section, doodles) {
 
     layer.innerHTML = '';
 
-    const area = section.offsetWidth * section.offsetHeight;
+    const sectionWidth = section.offsetWidth;
+    const sectionHeight = section.offsetHeight;
+    const area = sectionWidth * sectionHeight;
     const estimated = Math.round(area / DOODLE_CONFIG.areaPerDoodle);
     const count = Math.min(
         DOODLE_CONFIG.maxCount,
@@ -117,22 +134,53 @@ function buildDoodlesForSection(section, doodles) {
     );
 
     const opacityRange = getDoodleOpacityRange();
+    const placed = [];
+    const horizontalPadding = Math.max(sectionWidth * (DOODLE_CONFIG.insetPadding / 100), 12);
+    const verticalPadding = Math.max(sectionHeight * (DOODLE_CONFIG.edgePaddingPercent / 100), 18);
 
     for (let i = 0; i < count; i += 1) {
+        let attempts = 0;
+        let placedDoodle = null;
+
+        while (attempts < DOODLE_CONFIG.maxPlacementAttempts && !placedDoodle) {
+            const size = DOODLE_CONFIG.minSize + Math.random() * (DOODLE_CONFIG.maxSize - DOODLE_CONFIG.minSize);
+            const maxLeft = Math.max(horizontalPadding, sectionWidth - horizontalPadding - size);
+            const maxTop = Math.max(verticalPadding, sectionHeight - verticalPadding - size);
+            const leftPx = horizontalPadding + Math.random() * Math.max(1, maxLeft - horizontalPadding);
+            const topPx = verticalPadding + Math.random() * Math.max(1, maxTop - verticalPadding);
+            const centerX = leftPx + size / 2;
+            const centerY = topPx + size / 2;
+
+            const hasOverlap = placed.some(item => {
+                const dx = centerX - item.centerX;
+                const dy = centerY - item.centerY;
+                const distance = Math.hypot(dx, dy);
+                const minDistance = (size + item.size) * 0.5 * DOODLE_CONFIG.minSeparationFactor;
+                return distance < minDistance;
+            });
+
+            if (!hasOverlap) {
+                placedDoodle = { size, leftPx, topPx, centerX, centerY };
+            }
+
+            attempts += 1;
+        }
+
+        if (!placedDoodle) {
+            continue;
+        }
+
         const doodle = document.createElement('span');
         doodle.className = 'doodle';
-        const size = DOODLE_CONFIG.minSize + Math.random() * (DOODLE_CONFIG.maxSize - DOODLE_CONFIG.minSize);
-        const top = DOODLE_CONFIG.insetPadding + Math.random() * (100 - DOODLE_CONFIG.insetPadding * 2);
-        const left = DOODLE_CONFIG.insetPadding + Math.random() * (100 - DOODLE_CONFIG.insetPadding * 2);
-
-        doodle.style.width = `${size.toFixed(0)}px`;
-        doodle.style.height = `${size.toFixed(0)}px`;
-        doodle.style.top = `${top.toFixed(2)}%`;
-        doodle.style.left = `${left.toFixed(2)}%`;
+        doodle.style.width = `${placedDoodle.size.toFixed(0)}px`;
+        doodle.style.height = `${placedDoodle.size.toFixed(0)}px`;
+        doodle.style.left = `${placedDoodle.leftPx.toFixed(1)}px`;
+        doodle.style.top = `${placedDoodle.topPx.toFixed(1)}px`;
         doodle.style.opacity = (opacityRange.min + Math.random() * (opacityRange.max - opacityRange.min)).toFixed(2);
         doodle.style.transform = `rotate(${Math.round(Math.random() * 360)}deg)`;
         doodle.style.backgroundImage = `url("${doodles[Math.floor(Math.random() * doodles.length)]}")`;
 
+        placed.push(placedDoodle);
         layer.appendChild(doodle);
     }
 }
