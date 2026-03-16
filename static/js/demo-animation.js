@@ -48,6 +48,41 @@ function toPascalCase(name) {
     return name.replace(/(^\w|[-_]\w)/g, (match) => match.replace(/[-_]/, '').toUpperCase());
 }
 
+function isDarkTheme() {
+    if (window.SignFlowIconGradient && typeof window.SignFlowIconGradient.isDarkTheme === 'function') {
+        return window.SignFlowIconGradient.isDarkTheme();
+    }
+
+    return (document.documentElement.getAttribute('data-theme') || 'light') === 'dark';
+}
+
+function applyFallbackHandGradient(svg) {
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    gradient.setAttribute('id', 'hand-neon-gradient');
+    gradient.setAttribute('x1', '0');
+    gradient.setAttribute('y1', '1');
+    gradient.setAttribute('x2', '1');
+    gradient.setAttribute('y2', '0');
+
+    const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop1.setAttribute('offset', '0%');
+    stop1.setAttribute('class', 'hand-neon-stop-1');
+    const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop2.setAttribute('offset', '55%');
+    stop2.setAttribute('class', 'hand-neon-stop-2');
+    const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop3.setAttribute('offset', '100%');
+    stop3.setAttribute('class', 'hand-neon-stop-3');
+
+    gradient.appendChild(stop1);
+    gradient.appendChild(stop2);
+    gradient.appendChild(stop3);
+    defs.appendChild(gradient);
+    svg.insertBefore(defs, svg.firstChild);
+    svg.style.stroke = 'url(#hand-neon-gradient)';
+}
+
 function createLucideSvg(name, size = 72) {
     if (!window.lucide || !window.lucide.icons || !window.lucide.createElement) return null;
     const key = toPascalCase(name);
@@ -59,29 +94,13 @@ function createLucideSvg(name, size = 72) {
         class: 'hand-svg',
         'stroke-width': 1.8
     });
-    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-    const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-    gradient.setAttribute('id', 'hand-neon-gradient');
-    gradient.setAttribute('x1', '0');
-    gradient.setAttribute('y1', '0');
-    gradient.setAttribute('x2', '1');
-    gradient.setAttribute('y2', '1');
 
-    const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-    stop1.setAttribute('offset', '0%');
-    stop1.setAttribute('class', 'hand-neon-stop-1');
-    const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-    stop2.setAttribute('offset', '50%');
-    stop2.setAttribute('class', 'hand-neon-stop-2');
-    const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-    stop3.setAttribute('offset', '100%');
-    stop3.setAttribute('class', 'hand-neon-stop-3');
+    if (window.SignFlowIconGradient && typeof window.SignFlowIconGradient.applyToSvg === 'function' && isDarkTheme()) {
+        window.SignFlowIconGradient.applyToSvg(svg, { rootStroke: true });
+    } else if (isDarkTheme()) {
+        applyFallbackHandGradient(svg);
+    }
 
-    gradient.appendChild(stop1);
-    gradient.appendChild(stop2);
-    gradient.appendChild(stop3);
-    defs.appendChild(gradient);
-    svg.insertBefore(defs, svg.firstChild);
     return svg;
 }
 

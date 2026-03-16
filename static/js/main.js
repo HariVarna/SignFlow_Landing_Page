@@ -83,12 +83,208 @@ const DOODLE_SVGS = (() => {
 })();
 
 let doodleResizeTimer;
+let iconGradientCounter = 0;
 
 function prefersReducedMotion() {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+function isDarkTheme() {
+    return (document.documentElement.getAttribute('data-theme') || 'light') === 'dark';
+}
+
+function getIconGradientStops() {
+    const rootStyles = getComputedStyle(document.documentElement);
+    return [
+        { offset: '0%', color: rootStyles.getPropertyValue('--icon-gradient-start').trim() || '#a855f7' },
+        { offset: '55%', color: rootStyles.getPropertyValue('--icon-gradient-mid').trim() || '#60a5fa' },
+        { offset: '100%', color: rootStyles.getPropertyValue('--icon-gradient-end').trim() || '#22d3ee' }
+    ];
+}
+
+function ensureSvgGradient(svg) {
+    if (!svg) return null;
+
+    let defs = svg.querySelector('defs');
+    if (!defs) {
+        defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        svg.insertBefore(defs, svg.firstChild);
+    }
+
+    let gradientId = svg.dataset.signflowGradientId;
+    if (!gradientId) {
+        iconGradientCounter += 1;
+        gradientId = `signflow-icon-gradient-${iconGradientCounter}`;
+        svg.dataset.signflowGradientId = gradientId;
+    }
+
+    let gradient = defs.querySelector(`#${gradientId}`);
+    if (!gradient) {
+        gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+        gradient.setAttribute('id', gradientId);
+        gradient.setAttribute('data-signflow-icon-gradient', 'true');
+        defs.insertBefore(gradient, defs.firstChild);
+    }
+
+    gradient.setAttribute('x1', '0');
+    gradient.setAttribute('y1', '1');
+    gradient.setAttribute('x2', '1');
+    gradient.setAttribute('y2', '0');
+    gradient.replaceChildren();
+
+    getIconGradientStops().forEach(({ offset, color }) => {
+        const stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        stop.setAttribute('offset', offset);
+        stop.setAttribute('stop-color', color);
+        gradient.appendChild(stop);
+    });
+
+    return `url(#${gradientId})`;
+}
+
+function clearGradientFromSvg(svg, options = {}) {
+    const {
+        rootStroke = false,
+        rootFill = false,
+        strokeSelectors = [],
+        fillSelectors = []
+    } = options;
+
+    if (!svg) return;
+
+    if (rootStroke) {
+        svg.style.removeProperty('stroke');
+    }
+
+    if (rootFill) {
+        svg.style.removeProperty('fill');
+    }
+
+    strokeSelectors.forEach((selector) => {
+        svg.querySelectorAll(selector).forEach((element) => {
+            element.style.removeProperty('stroke');
+        });
+    });
+
+    fillSelectors.forEach((selector) => {
+        svg.querySelectorAll(selector).forEach((element) => {
+            element.style.removeProperty('fill');
+        });
+    });
+
+    const gradientId = svg.dataset.signflowGradientId;
+    if (!gradientId) return;
+
+    const defs = svg.querySelector('defs');
+    const gradient = defs?.querySelector(`#${gradientId}`);
+    if (gradient) {
+        gradient.remove();
+    }
+
+    if (defs && !defs.children.length) {
+        defs.remove();
+    }
+
+    delete svg.dataset.signflowGradientId;
+}
+
+function applyGradientToSvg(svg, options = {}) {
+    const {
+        rootStroke = false,
+        rootFill = false,
+        strokeSelectors = [],
+        fillSelectors = []
+    } = options;
+
+    const gradientRef = ensureSvgGradient(svg);
+    if (!gradientRef) return;
+
+    if (rootStroke) {
+        svg.style.stroke = gradientRef;
+    }
+
+    if (rootFill) {
+        svg.style.fill = gradientRef;
+    }
+
+    strokeSelectors.forEach((selector) => {
+        svg.querySelectorAll(selector).forEach((element) => {
+            element.style.stroke = gradientRef;
+        });
+    });
+
+    fillSelectors.forEach((selector) => {
+        svg.querySelectorAll(selector).forEach((element) => {
+            element.style.fill = gradientRef;
+        });
+    });
+}
+
+function applyGradientToDocument(root = document) {
+    if (!isDarkTheme()) {
+        root.querySelectorAll('svg.lucide, svg.hand-svg').forEach((svg) => {
+            clearGradientFromSvg(svg, { rootStroke: true });
+        });
+
+        root.querySelectorAll('.theme-toggle svg').forEach((svg) => {
+            clearGradientFromSvg(svg, { rootStroke: true });
+        });
+
+        root.querySelectorAll('.pipeline-connector svg').forEach((svg) => {
+            clearGradientFromSvg(svg, {
+                strokeSelectors: ['line', 'path', 'polyline', 'rect', 'circle', 'ellipse'],
+                fillSelectors: ['polygon']
+            });
+        });
+
+        root.querySelectorAll('.cursor-icon').forEach((svg) => {
+            clearGradientFromSvg(svg, {
+                strokeSelectors: ['path'],
+                fillSelectors: ['path']
+            });
+        });
+
+        return;
+    }
+
+    root.querySelectorAll('svg.lucide, svg.hand-svg').forEach((svg) => {
+        applyGradientToSvg(svg, { rootStroke: true });
+    });
+
+    root.querySelectorAll('.theme-toggle svg').forEach((svg) => {
+        applyGradientToSvg(svg, { rootStroke: true });
+    });
+
+    root.querySelectorAll('.pipeline-connector svg').forEach((svg) => {
+        applyGradientToSvg(svg, {
+            strokeSelectors: ['line', 'path', 'polyline', 'rect', 'circle', 'ellipse'],
+            fillSelectors: ['polygon']
+        });
+    });
+
+    root.querySelectorAll('.cursor-icon').forEach((svg) => {
+        applyGradientToSvg(svg, {
+            strokeSelectors: ['path'],
+            fillSelectors: ['path']
+        });
+    });
+}
+
+window.SignFlowIconGradient = {
+    applyToSvg: applyGradientToSvg,
+    applyToDocument: applyGradientToDocument,
+    ensureSvgGradient,
+    isDarkTheme
+};
+
 function initLucideIcons() {
+    document.querySelectorAll('.icon-stage[data-lucide="align-left"]').forEach((icon) => {
+        const stageTitle = icon.closest('.pipeline-content')?.querySelector('h3')?.textContent?.trim();
+        if (stageTitle === 'LLM Smoothing') {
+            icon.setAttribute('data-lucide', 'sparkles');
+        }
+    });
+
     if (window.lucide && typeof window.lucide.createIcons === 'function') {
         window.lucide.createIcons({
             attrs: {
@@ -96,6 +292,8 @@ function initLucideIcons() {
             }
         });
     }
+
+    applyGradientToDocument(document);
 }
 
 function isHomePage() {
@@ -262,6 +460,10 @@ function initApp() {
             initDoodleLayers();
         });
     }
+
+    window.addEventListener('themechange', () => {
+        applyGradientToDocument(document);
+    });
 
     if (DOODLE_REBUILD_ON_RESIZE) {
         window.addEventListener('resize', () => {
