@@ -43,19 +43,36 @@ def add_security_headers(response):
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'DENY'
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
-    response.headers['Permissions-Policy'] = 'camera=(), microphone=(), geolocation=()'
     response.headers['Cross-Origin-Opener-Policy'] = 'same-origin'
     response.headers['Cross-Origin-Resource-Policy'] = 'same-origin'
-    response.headers['Content-Security-Policy'] = (
-        "default-src 'self'; "
-        "img-src 'self' data:; "
-        "style-src 'self' 'unsafe-inline'; "
-        "script-src 'self'; "
-        "font-src 'self' data:; "
-        "base-uri 'self'; "
-        "form-action 'self'; "
-        "frame-ancestors 'none'"
-    )
+
+    # Relaxed CSP for /live route (MediaPipe CDN + camera + FastAPI server)
+    if request.path == '/live':
+        response.headers['Permissions-Policy'] = 'microphone=(), geolocation=()'
+        response.headers['Content-Security-Policy'] = (
+            "default-src 'self'; "
+            "img-src 'self' data: blob:; "
+            "style-src 'self' 'unsafe-inline'; "
+            "script-src 'self' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://storage.googleapis.com; "
+            "connect-src 'self' https://cdn.jsdelivr.net https://storage.googleapis.com http: https:; "
+            "worker-src blob:; "
+            "font-src 'self' data:; "
+            "base-uri 'self'; "
+            "form-action 'self'; "
+            "frame-ancestors 'none'"
+        )
+    else:
+        response.headers['Permissions-Policy'] = 'camera=(), microphone=(), geolocation=()'
+        response.headers['Content-Security-Policy'] = (
+            "default-src 'self'; "
+            "img-src 'self' data:; "
+            "style-src 'self' 'unsafe-inline'; "
+            "script-src 'self'; "
+            "font-src 'self' data:; "
+            "base-uri 'self'; "
+            "form-action 'self'; "
+            "frame-ancestors 'none'"
+        )
     return response
 
 
@@ -63,6 +80,12 @@ def add_security_headers(response):
 def index():
     """Landing page"""
     return render_template('index.html')
+
+
+@app.route('/live')
+def live():
+    """Live sign language detection — mobile camera + landmark streaming"""
+    return render_template('live.html')
 
 
 @app.route('/about')
@@ -312,4 +335,4 @@ def internal_server_error(error):
 
 if __name__ == '__main__':
     debug_mode = os.environ.get('FLASK_DEBUG') == '1'
-    app.run(debug=debug_mode)
+    app.run(debug=debug_mode, host='0.0.0.0')

@@ -27,6 +27,7 @@
                 <a href="{{ url_for('index') }}#why-matters" class="nav-link" data-scroll="why-matters">Why It Matters</a>
                 <a href="{{ url_for('index') }}#how-works" class="nav-link" data-scroll="how-works">How It Works</a>
                 <a href="{{ url_for('index') }}#download" class="nav-link" data-scroll="download">Download</a>
+                <a href="{{ url_for('live') }}" class="nav-link">Try Online</a>
                 <a href="{{ url_for('index') }}#donate" class="nav-link nav-donate" data-scroll="donate">Donate</a>
                 {% if session.get('user') %}
                 <a href="{{ url_for('logout') }}" class="nav-link">Logout ({{ session['user'].get('name', 'User') }})</a>
