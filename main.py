@@ -4,11 +4,25 @@ Flask application entry point
 """
 
 import os
+from dotenv import load_dotenv
+from authlib.integrations.flask_client import OAuth
 
-from flask import Flask, render_template, request, url_for
+load_dotenv()
+
+from flask import Flask, render_template, request, url_for, session, redirect
 
 app = Flask(__name__)
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'default_secret_key_if_not_set')
 app.config['MAX_CONTENT_LENGTH'] = 128 * 1024
+
+oauth = OAuth(app)
+google = oauth.register(
+    name='google',
+    client_id=os.environ.get('GOOGLE_CLIENT_ID'),
+    client_secret=os.environ.get('GOOGLE_CLIENT_SECRET'),
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={'scope': 'openid email profile'},
+)
 
 
 def render_placeholder(title, description, detail, cta_label='Return home', cta_href=None):
@@ -186,13 +200,23 @@ def auth_github():
 
 @app.route('/auth/google')
 def auth_google():
-    return render_placeholder(
-        'Google Sign-In',
-        'Google OAuth will be wired here.',
-        'We will add the OAuth flow and account linking when authentication is enabled.',
-        cta_label='Back to Sign In',
-        cta_href=url_for('login')
-    )
+    """Google Sign-In route"""
+    redirect_uri = url_for('auth_google_callback', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+@app.route('/auth/google/callback')
+def auth_google_callback():
+    """Google Sign-In callback"""
+    token = google.authorize_access_token()
+    user = token.get('userinfo')
+    if user:
+        session['user'] = user
+    return redirect(url_for('index'))
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('index'))
 
 
 @app.route('/docs')
