@@ -84,7 +84,8 @@ const debugLastError = document.getElementById("debug-last-error");
    State
    ================================================================ */
 
-let serverUrl = "http://192.168.56.1:8000";
+// Default server URL (hardcoded, can be changed by user)
+let serverUrl = "http://192.168.1.100:8000";
 let faceLandmarker = null;
 let handLandmarker = null;
 let poseLandmarker = null;
@@ -593,8 +594,14 @@ async function flipCamera() {
    Event Listeners
    ================================================================ */
 
+
+// Update serverUrl from input box before starting session
 setupForm.addEventListener("submit", function(e) {
     e.preventDefault();
+    const urlInput = document.getElementById("server-url");
+    if (urlInput && urlInput.value) {
+        serverUrl = urlInput.value.trim();
+    }
     startBtn.disabled = true;
     startBtn.textContent = "Starting…";
     startSession().finally(function() {
