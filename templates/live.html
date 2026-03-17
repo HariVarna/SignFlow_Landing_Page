@@ -35,7 +35,7 @@
         <div class="live-layout">
             
             <!-- Top: Camera Section -->
-            <div class="camera-section" id="camera-section">
+            <div class="camera-section portrait" id="camera-section">
                 <!-- Loading overlay -->
                 <div class="live-loading" id="live-loading">
                     <div class="spinner"></div>
@@ -58,6 +58,7 @@
             </div>
 
             <!-- Bottom: Controls & Captions -->
+
             <div class="controls-section">
                 <div class="caption-panel">
                     <div class="caption-pill" id="caption-pill">
@@ -66,13 +67,16 @@
                     </div>
                 </div>
 
-                    <!-- Debug/Status Panel -->
-                    <div class="debug-panel" id="debug-panel" style="margin-top: 1em; background: #222; color: #fff; padding: 10px; border-radius: 8px;">
-                        <div><b>Server Status:</b> <span id="debug-server-status">-</span></div>
-                        <div><b>Last Request:</b> <span id="debug-last-request">-</span></div>
-                        <div><b>Last Response:</b> <span id="debug-last-response">-</span></div>
-                        <div><b>Last Error:</b> <span id="debug-last-error">-</span></div>
-                    </div>
+                <!-- Collapsible Technical Details -->
+                <details class="debug-panel-collapsible" id="debug-panel" style="margin-top: 1em;">
+                  <summary style="font-weight:600;font-size:1.1em;cursor:pointer;outline:none;">Technical Details</summary>
+                  <div class="debug-panel-inner">
+                    <div><b>Server Status:</b> <span id="debug-server-status">-</span></div>
+                    <div><b>Last Request:</b> <span id="debug-last-request">-</span></div>
+                    <div><b>Last Response:</b> <span id="debug-last-response">-</span></div>
+                    <div><b>Last Error:</b> <span id="debug-last-error">-</span></div>
+                  </div>
+                </details>
 
                 <div class="action-buttons">
                     <button class="live-btn btn-secondary" id="flip-btn">
