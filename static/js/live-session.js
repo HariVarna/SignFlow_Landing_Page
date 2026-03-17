@@ -74,6 +74,12 @@ const stopBtn = document.getElementById("stop-btn");
 const flipBtn = document.getElementById("flip-btn");
 const toastEl = document.getElementById("live-toast");
 
+// Debug panel references
+const debugServerStatus = document.getElementById("debug-server-status");
+const debugLastRequest = document.getElementById("debug-last-request");
+const debugLastResponse = document.getElementById("debug-last-response");
+const debugLastError = document.getElementById("debug-last-error");
+
 /* ================================================================
    State
    ================================================================ */
@@ -401,6 +407,11 @@ async function sendToServer(buffer) {
     if (pendingRequest) return;
     pendingRequest = true;
 
+    // Show request info
+    if (debugLastRequest) debugLastRequest.textContent = JSON.stringify({frames: buffer}).slice(0, 120) + (buffer.length > 40 ? '...':'');
+    if (debugServerStatus) debugServerStatus.textContent = 'Connecting...';
+    if (debugLastError) debugLastError.textContent = '-';
+
     try {
         var response = await fetch(serverUrl + "/predict", {
             method: "POST",
@@ -411,6 +422,10 @@ async function sendToServer(buffer) {
         if (!response.ok) throw new Error("Server responded " + response.status);
 
         var data = await response.json();
+
+        // Show response info
+        if (debugLastResponse) debugLastResponse.textContent = JSON.stringify(data);
+        if (debugServerStatus) debugServerStatus.textContent = 'OK';
 
         if (data.sign && data.sign !== lastCaption) {
             lastCaption = data.sign;
@@ -430,6 +445,10 @@ async function sendToServer(buffer) {
         }
     } catch (err) {
         console.warn("API error:", err.message);
+
+        // Show error info
+        if (debugLastError) debugLastError.textContent = err.message;
+        if (debugServerStatus) debugServerStatus.textContent = 'Error';
     } finally {
         pendingRequest = false;
     }
