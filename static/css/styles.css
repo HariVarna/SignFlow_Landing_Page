@@ -1342,6 +1342,16 @@ section h2 {
     margin: 0 auto;
 }
 
+.download-try-online {
+    margin: var(--spacing-2xl) auto 0 auto;
+    max-width: 500px;
+    width: 100%;
+}
+
+.download-try-online .download-card {
+    padding: var(--spacing-xl);
+}
+
 .download-card {
     background-color: var(--bg-primary);
     padding: var(--spacing-lg);

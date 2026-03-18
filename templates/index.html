@@ -15,7 +15,6 @@
         
         <div class="hero-buttons" data-animation="fade-in-up">
             <a href="{{ url_for('static', filename='assets/signflow-ily.svg') }}" class="btn btn-primary" download="SignFlow-ILY.svg">Download SignFlow</a>
-            <a href="{{ url_for('live') }}" class="btn btn-secondary">Try Online</a>
             <a href="#how-works" class="btn btn-secondary">See How It Works</a>
         </div>
     </div>
@@ -207,41 +206,6 @@
     </div>
 </section>
 
-<!-- Platform Support Section -->
-<section class="platform-support">
-    <h2>Platform Support</h2>
-    <div class="platforms-grid">
-        <div class="platform-card">
-            <div class="platform-icon">
-                <span class="icon icon-platform" data-lucide="monitor" aria-hidden="true">🪟</span>
-            </div>
-            <h3>Windows</h3>
-            <p>Full support</p>
-        </div>
-        <div class="platform-card">
-            <div class="platform-icon">
-                <span class="icon icon-platform" data-lucide="terminal" aria-hidden="true">🐧</span>
-            </div>
-            <h3>Linux</h3>
-            <p>Experimental</p>
-        </div>
-        <div class="platform-card">
-            <div class="platform-icon">
-                <span class="icon icon-platform" data-lucide="laptop" aria-hidden="true">🍎</span>
-            </div>
-            <h3>macOS</h3>
-            <p>Coming soon</p>
-        </div>
-        <div class="platform-card">
-            <div class="platform-icon">
-                <span class="icon icon-platform" data-lucide="smartphone" aria-hidden="true">📱</span>
-            </div>
-            <h3>Android</h3>
-            <p>Coming soon</p>
-        </div>
-    </div>
-</section>
-
 <!-- Download Section -->
 <section id="download" class="download-section">
     <h2>Download SignFlow</h2>
@@ -267,11 +231,14 @@
             <a href="{{ url_for('download_macos') }}" class="btn btn-disabled" aria-disabled="true">Coming Soon</a>
             <p class="version-info">Q4 2026</p>
         </div>
-        <div class="download-card">
+    </div>
+    
+    <div class="download-try-online">
+        <div class="download-card featured">
             <h3>Android</h3>
-            <p class="download-description">SignFlow mobile application</p>
-            <a href="{{ url_for('download_android') }}" class="btn btn-disabled" aria-disabled="true">Coming Soon</a>
-            <p class="version-info">Coming 2026</p>
+            <p class="download-description">Try our live web application right now</p>
+            <a href="{{ url_for('live') }}" class="btn btn-primary">Try Online</a>
+            <p class="version-info">Web Alpha</p>
         </div>
     </div>
 </section>

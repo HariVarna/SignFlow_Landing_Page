@@ -6,6 +6,8 @@ Flask application entry point
 import os
 from dotenv import load_dotenv
 from authlib.integrations.flask_client import OAuth
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 load_dotenv()
 
@@ -14,6 +16,26 @@ from flask import Flask, render_template, request, url_for, session, redirect
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'default_secret_key_if_not_set')
 app.config['MAX_CONTENT_LENGTH'] = 128 * 1024
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///users.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+# User Model
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    google_id = db.Column(db.String(100), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    name = db.Column(db.String(100))
+    picture = db.Column(db.String(255))
+    last_login = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<User {self.email}>'
+
+# Initialize Database
+with app.app_context():
+    db.create_all()
 
 oauth = OAuth(app)
 google = oauth.register(
@@ -231,9 +253,37 @@ def auth_google():
 def auth_google_callback():
     """Google Sign-In callback"""
     token = google.authorize_access_token()
-    user = token.get('userinfo')
-    if user:
-        session['user'] = user
+    user_info = token.get('userinfo')
+    
+    if user_info:
+        # Persistence Logic
+        user = User.query.filter_by(google_id=user_info['sub']).first()
+        
+        if not user:
+            # Create new user
+            user = User(
+                google_id=user_info['sub'],
+                email=user_info['email'],
+                name=user_info.get('name'),
+                picture=user_info.get('picture')
+            )
+            db.session.add(user)
+        else:
+            # Update existing user
+            user.name = user_info.get('name')
+            user.picture = user_info.get('picture')
+            user.last_login = datetime.utcnow()
+        
+        db.session.commit()
+        
+        # Store essential info in session
+        session['user'] = {
+            'id': user.id,
+            'email': user.email,
+            'name': user.name,
+            'picture': user.picture
+        }
+        
     return redirect(url_for('index'))
 
 @app.route('/logout')
@@ -276,7 +326,7 @@ def accessibility():
         'Our accessibility commitments will live here.',
         'We will document caption standards, inclusive design goals, and testing.'
     )
-
+    
 
 @app.route('/status')
 def status():
